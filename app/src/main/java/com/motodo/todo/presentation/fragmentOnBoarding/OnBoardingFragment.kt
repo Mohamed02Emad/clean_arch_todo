@@ -1,4 +1,4 @@
-package com.motodo.todo.presentation.onBoarding
+package com.motodo.todo.presentation.fragmentOnBoarding
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentOnBoardingBinding
 import com.motodo.todo.domain.models.OnBoarding
@@ -53,11 +54,11 @@ class OnBoardingFragment : Fragment() {
         }
 
         binding.btnGetStarted.setOnClickListener {
-            Toast.makeText(requireContext(), "Get started", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToHomeFragment())
         }
     }
 
-    private fun setCurrentCircles(pageNumber: Int) {
+    private fun setCurrentCircle(pageNumber: Int) {
         when (pageNumber){
             0 ->{
                 binding.apply {
@@ -83,7 +84,7 @@ class OnBoardingFragment : Fragment() {
         }
     }
 
-    private fun showButtons(onBoarding: OnBoarding) {
+    private fun setButtonsVisibility(onBoarding: OnBoarding) {
         when (onBoarding.pageNumber){
             0 ->{
                 binding.apply {
@@ -113,7 +114,7 @@ class OnBoardingFragment : Fragment() {
         binding.ivOnboarding.setImageResource(onBoarding.image)
         binding.tvUpperText.text = onBoarding.title
         binding.tvLowerText.text = onBoarding.description
-        showButtons(onBoarding)
-        setCurrentCircles(onBoarding.pageNumber)
+        setButtonsVisibility(onBoarding)
+        setCurrentCircle(onBoarding.pageNumber)
     }
 }

@@ -1,4 +1,4 @@
-package com.motodo.todo.presentation.onBoarding
+package com.motodo.todo.presentation.fragmentOnBoarding
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

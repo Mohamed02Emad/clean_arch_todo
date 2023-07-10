@@ -6,6 +6,21 @@
     app:startDestination="@id/onBoardingFragment">
     <fragment
         android:id="@+id/onBoardingFragment"
-        android:name="com.motodo.todo.presentation.onBoarding.OnBoardingFragment"
-        android:label="OnBoardingFragment" />
+        android:name="com.motodo.todo.presentation.fragmentOnBoarding.OnBoardingFragment"
+        android:label="OnBoardingFragment" >
+        <action
+            android:id="@+id/action_onBoardingFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
+            app:popUpTo="@id/home_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.motodo.todo.presentation.fragmentHome.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
