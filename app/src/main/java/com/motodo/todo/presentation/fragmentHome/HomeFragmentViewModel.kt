@@ -1,23 +1,19 @@
 package com.motodo.todo.presentation.fragmentHome
 
-import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.michalsvec.singlerowcalendar.calendar.CalendarViewManager
 import com.michalsvec.singlerowcalendar.calendar.SingleRowCalendarAdapter
 import com.michalsvec.singlerowcalendar.selection.CalendarSelectionManager
-import com.michalsvec.singlerowcalendar.utils.DateUtils
 import com.motodo.todo.R
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.useCases.GetDateToDosUseCase
 import com.motodo.todo.utils.DateHelper
 import kotlinx.coroutines.launch
 import java.util.Date
-import kotlin.math.log
 
 const val TAG = "mohamed"
 class HomeFragmentViewModel : ViewModel() {

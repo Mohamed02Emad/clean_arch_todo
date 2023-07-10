@@ -15,6 +15,7 @@ import com.michalsvec.singlerowcalendar.selection.CalendarSelectionManager
 import com.michalsvec.singlerowcalendar.utils.DateUtils
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentHomeBinding
+import com.motodo.todo.presentation.recyclerViews.TodosAdapter
 import com.motodo.todo.utils.DateHelper
 import java.util.Date
 
@@ -22,6 +23,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeFragmentViewModel by viewModels()
+    private lateinit var myAdapter : TodosAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,15 +35,23 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupRecyclerView()
         setupRowCalendar()
         setObservers()
 
     }
 
+    private fun setupRecyclerView() {
+        myAdapter = TodosAdapter()
+        myAdapter.differ.submitList(viewModel.todos.value)
+        binding.rvTodos.adapter = myAdapter
+
+    }
+
     private fun setObservers() {
      viewModel.todos.observe(viewLifecycleOwner){newList ->
-         //todo : subit newList to rv adapter
-         Toast.makeText(requireContext(),newList?.size.toString(), Toast.LENGTH_SHORT).show()
+         myAdapter.differ.submitList(newList)
+         //Toast.makeText(requireContext(), "Observers", Toast.LENGTH_SHORT).show()
      }
     }
 

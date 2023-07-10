@@ -10,7 +10,7 @@ data class ToDo(
     var title: String = "",
     var hasAlarm : Boolean = false,
     var alarmTime : String? = null,
-    var isDone : Boolean = false,
+    var isChecked : Boolean = false,
     var date : Date = Date(),
     var remindBefore : RemindBefroeTime = RemindBefroeTime.DO_NOT,
     var priority: Priority = Priority.NONE
