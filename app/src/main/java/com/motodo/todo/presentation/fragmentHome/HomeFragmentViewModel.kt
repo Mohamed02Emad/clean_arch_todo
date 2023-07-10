@@ -13,6 +13,7 @@ import com.michalsvec.singlerowcalendar.selection.CalendarSelectionManager
 import com.michalsvec.singlerowcalendar.utils.DateUtils
 import com.motodo.todo.R
 import com.motodo.todo.domain.models.ToDo
+import com.motodo.todo.domain.useCases.GetDateToDosUseCase
 import com.motodo.todo.utils.DateHelper
 import kotlinx.coroutines.launch
 import java.util.Date
@@ -21,8 +22,10 @@ import kotlin.math.log
 const val TAG = "mohamed"
 class HomeFragmentViewModel : ViewModel() {
 
-    private val _todos  = MutableLiveData<ArrayList<ToDo>?>()
-    val todos  : LiveData<ArrayList<ToDo>?> = _todos
+    private val getTodosForDateUseCase  = GetDateToDosUseCase()
+
+    private val _todos  = MutableLiveData<List<ToDo>?>()
+    val todos  : LiveData<List<ToDo>?> = _todos
 
     private val _currentDate  = MutableLiveData<Date?>(null)
     val currentDate  : LiveData<Date?> = _currentDate
@@ -39,8 +42,7 @@ class HomeFragmentViewModel : ViewModel() {
 
     private fun updateTodos(date: Date) {
         viewModelScope.launch {
-            //todo : Create the repository
-           // _todos.value = repository.getListForDay(date)
+            _todos.value = getTodosForDateUseCase(date).value
         }
     }
 

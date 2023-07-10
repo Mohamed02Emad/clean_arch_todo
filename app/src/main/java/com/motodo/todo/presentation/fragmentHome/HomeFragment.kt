@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.michalsvec.singlerowcalendar.calendar.CalendarViewManager
@@ -32,7 +33,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRowCalendar()
         setObservers()
 
@@ -41,6 +41,7 @@ class HomeFragment : Fragment() {
     private fun setObservers() {
      viewModel.todos.observe(viewLifecycleOwner){newList ->
          //todo : subit newList to rv adapter
+         Toast.makeText(requireContext(),newList?.size.toString(), Toast.LENGTH_SHORT).show()
      }
     }
 
