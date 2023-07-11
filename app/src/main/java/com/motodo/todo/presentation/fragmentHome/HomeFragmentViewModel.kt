@@ -9,6 +9,8 @@ import com.michalsvec.singlerowcalendar.calendar.CalendarViewManager
 import com.michalsvec.singlerowcalendar.calendar.SingleRowCalendarAdapter
 import com.michalsvec.singlerowcalendar.selection.CalendarSelectionManager
 import com.motodo.todo.R
+import com.motodo.todo.domain.models.Priority
+import com.motodo.todo.domain.models.RemindBefroeTime
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.useCases.GetDateToDosUseCase
 import com.motodo.todo.utils.DateHelper
@@ -18,19 +20,84 @@ import java.util.Date
 const val TAG = "mohamed"
 class HomeFragmentViewModel : ViewModel() {
 
-    private val getTodosForDateUseCase  = GetDateToDosUseCase()
+    private val getTodosForDateUseCase = GetDateToDosUseCase()
 
-    private val _todos  = MutableLiveData<List<ToDo>?>()
-    val todos  : LiveData<List<ToDo>?> = _todos
+    private val _todos = MutableLiveData<List<ToDo>?>()
+    val todos: LiveData<List<ToDo>?> = _todos
 
-    private val _isBottomSheetOpened  = MutableLiveData<Boolean>(false)
-    val isBottomSheetOpened  : LiveData<Boolean> = _isBottomSheetOpened
+    private val _isBottomSheetOpened = MutableLiveData<Boolean>(false)
+    val isBottomSheetOpened: LiveData<Boolean> = _isBottomSheetOpened
 
-    private val _currentDate  = MutableLiveData<Date?>(null)
-    val currentDate  : LiveData<Date?> = _currentDate
+
+    private val _hasAlarm = MutableLiveData<Boolean>(true)
+    val hasAlarm: LiveData<Boolean> = _hasAlarm
+
+    private val _alarmTime = MutableLiveData<String?>(null)
+    val alarmTime: LiveData<String?> = _alarmTime
+
+    private val _title = MutableLiveData<String?>(null)
+    val title: LiveData<String?> = _title
+
+    private val _hasNotifyEnabled = MutableLiveData<Boolean>(true)
+    val hasNotifyEnabled: LiveData<Boolean> = _hasNotifyEnabled
+
+    private val _notifyBefore = MutableLiveData<RemindBefroeTime>(RemindBefroeTime.ONE_DAY)
+    val notifyBefore: LiveData<RemindBefroeTime> = _notifyBefore
+
+    private val _priority = MutableLiveData<Priority>(Priority.NONE)
+    val priority: LiveData<Priority> = _priority
+
+    fun resetInsertTodoData() {
+        _hasAlarm.value = true
+        _alarmTime.value = null
+        _title.value = null
+        _hasNotifyEnabled.value = true
+        _notifyBefore.value = RemindBefroeTime.ONE_DAY
+        _priority.value = Priority.NONE
+    }
+
+    fun setHasAlarm(hasAlarm: Boolean) {
+        _hasAlarm.value = hasAlarm
+    }
+
+    fun setAlarmTime(alarmTime: String?) {
+        _alarmTime.value = alarmTime
+    }
+
+    fun setTitle(title: String?) {
+        _title.value = title
+    }
+
+    fun setHasNotifyEnabled(hasNotifyEnabled: Boolean) {
+        _hasNotifyEnabled.value = hasNotifyEnabled
+    }
+
+    fun setNotifyBefore(notifyBefore: CharSequence) {
+        _notifyBefore.value =
+            when (notifyBefore) {
+                "In 24 hours" -> {
+                    RemindBefroeTime.ONE_DAY
+                }
+                "1 hour before" -> {
+                   RemindBefroeTime.ONE_HOUR
+                }
+                else -> {
+                 RemindBefroeTime.FIFTEEN_MINUTE
+                }
+            }
+
+    }
+
+    fun setPriority(priority: Priority) {
+        _priority.value = priority
+    }
+
+
+    private val _currentDate = MutableLiveData<Date?>(null)
+    val currentDate: LiveData<Date?> = _currentDate
     fun dayChanged(date: Date) {
         setCurrentDate(date)
-       // Log.d(TAG, "dayChanged: " + DateUtils.getDay1LetterName(date))
+        // Log.d(TAG, "dayChanged: " + DateUtils.getDay1LetterName(date))
     }
 
     fun triggerBottomSheetState() {

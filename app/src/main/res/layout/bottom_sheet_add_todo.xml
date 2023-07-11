@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="16dp">
@@ -18,7 +17,7 @@
         android:textColorHint="@color/primary_grey"
         android:textSize="16sp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:hint="Title" />
+        android:hint="Title" />
 
     <ImageView
         android:id="@+id/iv_alarm"
@@ -96,8 +95,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/iv_notification" />
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/chipGroup"
+    <LinearLayout
+        android:id="@+id/reminderChipGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -105,40 +104,66 @@
         app:layout_constraintTop_toBottomOf="@id/iv_notification"
         app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_one_day"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="24dp"
             android:text="In 24 hours"
+            android:paddingHorizontal="10dp"
+            android:textAllCaps="false"
+            android:background="@drawable/chip_selected"
             android:textColor="@color/secondary_blue"
-            android:textSize="14sp"
-            app:chipBackgroundColor="@color/primary_blue"
-            app:chipCornerRadius="40dp" />
+            android:textSize="14sp" />
 
-        <com.google.android.material.chip.Chip
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_one_hour"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="24dp"
+            android:paddingHorizontal="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:background="@drawable/chip_unselected"
             android:text="1 hour before"
-            android:textSize="14sp"
-            app:chipCornerRadius="40dp" />
+            android:textSize="14sp" />
 
-        <com.google.android.material.chip.Chip
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_fifteen_minutes"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="24dp"
+            android:paddingHorizontal="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:background="@drawable/chip_unselected"
             android:text="15 min before"
-            android:textSize="14sp"
-            app:chipCornerRadius="40dp" />
+            android:textSize="14sp" />
 
-    </com.google.android.material.chip.ChipGroup>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="@color/primary_grey"
-        app:layout_constraintTop_toBottomOf="@id/chipGroup" />
+        app:layout_constraintTop_toBottomOf="@id/reminderChipGroup" />
 
     <ImageView
         android:id="@+id/iv_priority"
@@ -147,7 +172,7 @@
         android:layout_marginTop="28dp"
         android:src="@drawable/ic_exclamation_mark"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chipGroup" />
+        app:layout_constraintTop_toBottomOf="@id/reminderChipGroup" />
 
     <TextView
         android:id="@+id/tv_priority"
