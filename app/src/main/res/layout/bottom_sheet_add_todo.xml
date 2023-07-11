@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp">
+
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/tv_background"
+        android:maxLines="1"
+        android:paddingHorizontal="8dp"
+        android:textColor="@color/black"
+        android:textColorHint="@color/primary_grey"
+        android:textSize="16sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:hint="Title" />
+
+    <ImageView
+        android:id="@+id/iv_alarm"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_alarm"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_title" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/primary_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_alarm"
+        app:layout_constraintStart_toEndOf="@id/iv_alarm"
+        app:layout_constraintTop_toTopOf="@id/iv_alarm"
+        android:text="10:30 AM" />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sw_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="@id/iv_alarm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_alarm" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="wrap_content"
+        android:layout_height="180dp"
+        android:timePickerMode="spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sw_alarm" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/primary_grey"
+        app:layout_constraintTop_toBottomOf="@id/timePicker" />
+
+
+    <ImageView
+        android:id="@+id/iv_notification"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/ic_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/timePicker" />
+
+    <TextView
+        android:id="@+id/tv_remind_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/primary_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification"
+        app:layout_constraintStart_toEndOf="@id/iv_notification"
+        app:layout_constraintTop_toTopOf="@id/iv_notification"
+        android:text="Remind me " />
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/sw_remind_me"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        app:layout_constraintBottom_toBottomOf="@id/iv_notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_notification" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_notification"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_one_day"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="In 24 hours"
+            android:textColor="@color/secondary_blue"
+            android:textSize="14sp"
+            app:chipBackgroundColor="@color/primary_blue"
+            app:chipCornerRadius="40dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_one_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="1 hour before"
+            android:textSize="14sp"
+            app:chipCornerRadius="40dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_fifteen_minutes"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="15 min before"
+            android:textSize="14sp"
+            app:chipCornerRadius="40dp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/primary_grey"
+        app:layout_constraintTop_toBottomOf="@id/chipGroup" />
+
+    <ImageView
+        android:id="@+id/iv_priority"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/ic_exclamation_mark"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/chipGroup" />
+
+    <TextView
+        android:id="@+id/tv_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textColor="@color/primary_grey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_priority"
+        app:layout_constraintStart_toEndOf="@id/iv_priority"
+        app:layout_constraintTop_toTopOf="@id/iv_priority"
+        android:text="Priority" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroup_priority"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_priority"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_priority_high"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="High"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:chipCornerRadius="40dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_priority_medium"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Medium"
+            android:textSize="14sp"
+            app:chipCornerRadius="40dp" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_priority_low"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="Low"
+            android:textSize="14sp"
+            app:chipCornerRadius="40dp" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_priority_none"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="None"
+            android:textColor="@color/secondary_blue"
+            app:chipBackgroundColor="@color/primary_blue"
+            android:textSize="14sp"
+            app:chipCornerRadius="40dp" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/btn_get_started"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/secondary_blue"
+        android:textSize="18sp"
+        android:text="save"
+        app:layout_constraintTop_toBottomOf="@id/chipGroup_priority"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

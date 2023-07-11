@@ -1,13 +1,16 @@
 package com.motodo.todo.presentation.fragmentHome
 
+import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.core.view.isGone
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
+import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentHomeBinding
 import com.motodo.todo.presentation.recyclerViews.TodosAdapter
 import java.util.Date
@@ -36,8 +39,20 @@ class HomeFragment : Fragment() {
 
     private fun setOnClickListeners() {
         binding.btnAddNewTodo.setOnClickListener {
-            Toast.makeText(requireContext(), "Add new task", Toast.LENGTH_SHORT).show()
+            openBottomSheet()
         }
+    }
+
+    private fun openBottomSheet() {
+        viewModel.triggerBottomSheetState()
+        val dialog = BottomSheetDialog(requireContext())
+        dialog.setContentView(R.layout.bottom_sheet_add_todo)
+        dialog.setOnDismissListener(object : DialogInterface.OnDismissListener {
+            override fun onDismiss(dialog: DialogInterface?) {
+               viewModel.triggerBottomSheetState()
+            }
+        })
+        dialog.show()
     }
 
     private fun setupRecyclerView() {
@@ -47,9 +62,13 @@ class HomeFragment : Fragment() {
     }
 
     private fun setObservers() {
-     viewModel.todos.observe(viewLifecycleOwner){newList ->
-         myAdapter.differ.submitList(newList)
+        viewModel.todos.observe(viewLifecycleOwner) { newList ->
+            myAdapter.differ.submitList(newList)
      }
+
+        viewModel.isBottomSheetOpened.observe(viewLifecycleOwner) {state->
+            binding.semiBlackWall.isGone = !state
+        }
     }
 
     val myCalendarChangesObserver = object : CalendarChangesObserver {
@@ -72,6 +91,5 @@ class HomeFragment : Fragment() {
             select(0)
         }
     }
-
 
 }

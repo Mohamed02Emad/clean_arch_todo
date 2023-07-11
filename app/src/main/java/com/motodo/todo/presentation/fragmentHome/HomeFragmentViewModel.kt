@@ -23,11 +23,18 @@ class HomeFragmentViewModel : ViewModel() {
     private val _todos  = MutableLiveData<List<ToDo>?>()
     val todos  : LiveData<List<ToDo>?> = _todos
 
+    private val _isBottomSheetOpened  = MutableLiveData<Boolean>(false)
+    val isBottomSheetOpened  : LiveData<Boolean> = _isBottomSheetOpened
+
     private val _currentDate  = MutableLiveData<Date?>(null)
     val currentDate  : LiveData<Date?> = _currentDate
     fun dayChanged(date: Date) {
         setCurrentDate(date)
        // Log.d(TAG, "dayChanged: " + DateUtils.getDay1LetterName(date))
+    }
+
+    fun triggerBottomSheetState() {
+        _isBottomSheetOpened.value = !_isBottomSheetOpened.value!!
     }
 
     fun isNewDate(date: Date): Boolean  = currentDate.value == null || date != currentDate.value
