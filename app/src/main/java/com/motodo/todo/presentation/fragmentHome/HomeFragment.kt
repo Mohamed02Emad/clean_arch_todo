@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TimePicker
+import android.widget.Toast
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -61,21 +62,44 @@ class HomeFragment : Fragment() {
         }
         setBottomSheetOnClicks(dialog)
         setBottomSheetObserver(dialog)
+        setBottomSheetViews(dialog)
         dialog.show()
+    }
+
+    private fun setBottomSheetViews(dialog: BottomSheetDialog) {
+        val timePicker = dialog.findViewById<TimePicker>(R.id.timePicker)
+        val hour = timePicker?.hour
+        val minute = timePicker?.minute
+        setAlarmTimeText(hour!!, minute!!)
     }
 
     private fun setBottomSheetObserver(dialog: BottomSheetDialog) {
         viewModel.alarmTime.observe(viewLifecycleOwner) { time ->
-            val text = if(time.isNullOrBlank()) "" else time.toString()
+            val text = if (time.isNullOrBlank()) "" else time.toString()
             dialog.findViewById<TextView>(R.id.tv_time)?.text = text
+        }
+
+        viewModel.hasAlarm.observe(viewLifecycleOwner){hasAlarm ->
+            dialog.findViewById<TextView>(R.id.tv_time)?.text =  if (hasAlarm){
+                viewModel.alarmTime.value
+            }else{
+                "Alarm"
+            }
         }
     }
 
     private fun setBottomSheetOnClicks(dialog: BottomSheetDialog) {
-        val listOfChips = listOf<Button>(
+        val listOfReminderChips = listOf<Button>(
             dialog.findViewById(R.id.chip_one_day)!!,
             dialog.findViewById(R.id.chip_one_hour)!!,
             dialog.findViewById(R.id.chip_fifteen_minutes)!!
+        )
+
+        val listOfPriorityChips = listOf<Button>(
+            dialog.findViewById(R.id.chip_priority_high)!!,
+            dialog.findViewById(R.id.chip_priority_medium)!!,
+            dialog.findViewById(R.id.chip_priority_low)!!,
+            dialog.findViewById(R.id.chip_priority_none)!!
         )
 
         dialog.apply {
@@ -98,24 +122,45 @@ class HomeFragment : Fragment() {
                 }
             }
 
-            for (chip in listOfChips) {
+            for (chip in listOfReminderChips) {
                 chip.setOnClickListener {
-                    unCheckAllChips(listOfChips)
+                    unCheckAllChips(listOfReminderChips)
                     selectChip(chip)
                     viewModel.setNotifyBefore(chip.text)
                 }
             }
 
+            for (chip in listOfPriorityChips) {
+                chip.setOnClickListener {
+                    unCheckAllChips(listOfPriorityChips)
+                    selectChip(chip)
+                    viewModel.setPriority(chip.text)
+                }
+            }
+
             findViewById<TimePicker>(R.id.timePicker)?.setOnTimeChangedListener { view, hourOfDay, minute ->
-                var string = ""
-                if (hourOfDay > 12) string += "${hourOfDay - 12}:"
-                else string += "${hourOfDay}:"
-                string += "${minute} "
-                if (hourOfDay > 12) string += "PM"
-                else string += "AM"
-                viewModel.setAlarmTime(string)
+                setAlarmTimeText(hourOfDay, minute)
+            }
+
+            findViewById<Button>(R.id.btn_save)?.setOnClickListener {
+               val isSaved  = viewModel.saveTodo()
+                if (isSaved) {
+                    dialog.dismiss()
+                }else{
+                    Toast.makeText(requireContext(),"Complete all Fields",Toast.LENGTH_SHORT).show()
+                }
             }
         }
+    }
+
+    private fun setAlarmTimeText(hourOfDay: Int, minute: Int) {
+        var string = ""
+        if (hourOfDay > 12) string += "${hourOfDay - 12}:"
+        else string += "${hourOfDay}:"
+        string += "${minute} "
+        if (hourOfDay > 12) string += "PM"
+        else string += "AM"
+        viewModel.setAlarmTime(string)
     }
 
     private fun unCheckAllChips(listOfChips: List<Button>) {

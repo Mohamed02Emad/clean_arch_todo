@@ -88,8 +88,22 @@ class HomeFragmentViewModel : ViewModel() {
 
     }
 
-    fun setPriority(priority: Priority) {
-        _priority.value = priority
+    fun setPriority(priority: CharSequence) {
+        _priority.value =
+            when (priority) {
+                "High" -> {
+                    Priority.HIGH
+                }
+                "Medium" -> {
+                    Priority.MEDIUM
+                }
+                "Low" -> {
+                    Priority.LOW
+                }
+                else -> {
+                    Priority.NONE
+                }
+            }
     }
 
 
@@ -114,6 +128,10 @@ class HomeFragmentViewModel : ViewModel() {
         viewModelScope.launch {
             _todos.value = getTodosForDateUseCase(date).value
         }
+    }
+
+    fun saveTodo() : Boolean {
+       return false
     }
 
 

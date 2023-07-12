@@ -127,13 +127,13 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_one_hour"
+            android:text="1 hour before"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:paddingHorizontal="10dp"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:background="@drawable/chip_unselected"
-            android:text="1 hour before"
             android:textSize="14sp" />
 
         <View
@@ -186,7 +186,7 @@
         app:layout_constraintTop_toTopOf="@id/iv_priority"
         android:text="Priority" />
 
-    <com.google.android.material.chip.ChipGroup
+    <LinearLayout
         android:id="@+id/chipGroup_priority"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -195,41 +195,76 @@
         app:layout_constraintTop_toBottomOf="@id/iv_priority"
         app:singleSelection="true">
 
-        <com.google.android.material.chip.Chip
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_priority_high"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
             android:text="High"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:background="@drawable/chip_unselected"
+            android:paddingHorizontal="10dp"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            app:chipCornerRadius="40dp" />
+            android:textAllCaps="false"
+            android:textSize="14sp" />
 
-        <com.google.android.material.chip.Chip
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_priority_medium"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
             android:text="Medium"
-            android:textSize="14sp"
-            app:chipCornerRadius="40dp" />
-
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_priority_low"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="24dp"
+            android:background="@drawable/chip_unselected"
+            android:paddingHorizontal="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/chip_priority_low"
             android:text="Low"
-            android:textSize="14sp"
-            app:chipCornerRadius="40dp" />
-        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:background="@drawable/chip_unselected"
+            android:paddingHorizontal="10dp"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/chip_priority_none"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="24dp"
             android:text="None"
+            android:background="@drawable/chip_selected"
+            android:paddingHorizontal="10dp"
+            android:textAllCaps="false"
             android:textColor="@color/secondary_blue"
-            app:chipBackgroundColor="@color/primary_blue"
-            android:textSize="14sp"
-            app:chipCornerRadius="40dp" />
+            android:textSize="14sp" />
 
-    </com.google.android.material.chip.ChipGroup>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
 
 
 
