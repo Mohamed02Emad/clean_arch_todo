@@ -21,8 +21,10 @@ import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentHomeBinding
 import com.motodo.todo.presentation.recyclerViews.TodosAdapter
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.Date
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding

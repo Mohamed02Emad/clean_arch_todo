@@ -2,11 +2,12 @@ package com.motodo.todo.data.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.motodo.todo.data.source.TodoDao
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.repositories.BaseRepository
 import java.util.Date
 
-class BaseRepositoryImpl : BaseRepository{
+class BaseRepositoryImpl(dao : TodoDao) : BaseRepository{
 
     override suspend fun getListForDate(date: Date): LiveData<List<ToDo>> {
         val todos  = MutableLiveData<List<ToDo>>()

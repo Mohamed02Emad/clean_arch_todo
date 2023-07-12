@@ -2,11 +2,12 @@ package com.motodo.todo.domain.useCases
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.motodo.todo.data.repositories.BaseRepositoryImpl
 import com.motodo.todo.domain.models.Priority
 import com.motodo.todo.domain.models.ToDo
 import java.util.Date
 
-class GetDateToDosUseCase {
+class GetDateToDosUseCase(private val repository: BaseRepositoryImpl) {
     suspend operator fun invoke(date: Date): MutableLiveData<List<ToDo>?> {
 
         //todo : should get data from repository

@@ -13,14 +13,17 @@ import com.motodo.todo.domain.models.Priority
 import com.motodo.todo.domain.models.RemindBefroeTime
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.useCases.GetDateToDosUseCase
+import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.utils.DateHelper
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.Date
+import javax.inject.Inject
 
 const val TAG = "mohamed"
-class HomeFragmentViewModel : ViewModel() {
+@HiltViewModel
+class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : ViewModel() {
 
-    private val getTodosForDateUseCase = GetDateToDosUseCase()
 
     private val _todos = MutableLiveData<List<ToDo>?>()
     val todos: LiveData<List<ToDo>?> = _todos
@@ -126,7 +129,7 @@ class HomeFragmentViewModel : ViewModel() {
 
     private fun updateTodos(date: Date) {
         viewModelScope.launch {
-            _todos.value = getTodosForDateUseCase(date).value
+            _todos.value = useCases.getTodosUseCase(date).value
         }
     }
 
