@@ -48,7 +48,6 @@ class OnBoardingFragment : Fragment() {
         }
     }
 
-
     private fun setObservers() {
         viewModel.currentPage.observe(viewLifecycleOwner){
             setOnBoarding(it)
