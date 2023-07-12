@@ -12,10 +12,11 @@ import com.motodo.todo.R
 import com.motodo.todo.domain.models.Priority
 import com.motodo.todo.domain.models.RemindBefroeTime
 import com.motodo.todo.domain.models.ToDo
-import com.motodo.todo.domain.useCases.GetDateToDosUseCase
 import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.utils.DateHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Date
 import javax.inject.Inject
@@ -25,8 +26,8 @@ const val TAG = "mohamed"
 class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : ViewModel() {
 
 
-    private val _todos = MutableLiveData<List<ToDo>?>()
-    val todos: LiveData<List<ToDo>?> = _todos
+    private val _todos = MutableLiveData<ArrayList<ToDo>?>(ArrayList())
+    val todos: LiveData<ArrayList<ToDo>?> = _todos
 
     private val _isBottomSheetOpened = MutableLiveData<Boolean>(false)
     val isBottomSheetOpened: LiveData<Boolean> = _isBottomSheetOpened
@@ -114,27 +115,48 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
     val currentDate: LiveData<Date?> = _currentDate
     fun dayChanged(date: Date) {
         setCurrentDate(date)
-        // Log.d(TAG, "dayChanged: " + DateUtils.getDay1LetterName(date))
     }
 
     fun triggerBottomSheetState() {
         _isBottomSheetOpened.value = !_isBottomSheetOpened.value!!
     }
 
-    fun isNewDate(date: Date): Boolean  = currentDate.value == null || date != currentDate.value
+    fun isNewDate(date: Date): Boolean = currentDate.value == null || date != currentDate.value
     private fun setCurrentDate(date: Date) {
-       _currentDate.value = date
-        updateTodos(date)
+        _currentDate.value = date
+        updateTodosList(date)
     }
 
-    private fun updateTodos(date: Date) {
-        viewModelScope.launch {
-            _todos.value = useCases.getTodosUseCase(date).value
+    private fun updateTodosList(date: Date) {
+        CoroutineScope(Dispatchers.Main).launch{
+            _todos.value = useCases.getTodosUseCase(date)
         }
     }
 
-    fun saveTodo() : Boolean {
-       return false
+    fun saveTodo(): Boolean {
+        if (title.value.isNullOrBlank()) {
+            return false
+        }
+        val date = currentDate.value!!
+        val todo = ToDo(
+            title = title.value!!,
+            hasAlarm = hasAlarm.value!!,
+            alarmTime = if (hasAlarm.value!!) alarmTime.value!! else null,
+            year = date.year,
+            month = date.month,
+            day = date.day,
+            remindBefore = if (hasNotifyEnabled.value!!) notifyBefore.value!! else RemindBefroeTime.DO_NOT,
+            priority = priority.value!!
+        )
+        saveTodoToDatabase(todo)
+        return true
+    }
+
+    private fun saveTodoToDatabase(todo: ToDo) {
+        viewModelScope.launch(Dispatchers.IO) {
+            useCases.insertUpdateTodoUseCase(todo)
+            updateTodosList(currentDate.value!!)
+        }
     }
 
 

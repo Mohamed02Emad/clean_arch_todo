@@ -189,6 +189,7 @@ class HomeFragment : Fragment() {
 
             todos.observe(viewLifecycleOwner) { newList ->
                 myAdapter.differ.submitList(newList)
+                Toast.makeText(requireContext(), newList?.size.toString() , Toast.LENGTH_SHORT).show()
             }
 
             isBottomSheetOpened.observe(viewLifecycleOwner) { state ->
