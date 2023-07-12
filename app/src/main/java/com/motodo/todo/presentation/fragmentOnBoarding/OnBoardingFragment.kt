@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentOnBoardingBinding
 import com.motodo.todo.domain.models.OnBoarding
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class OnBoardingFragment : Fragment() {
 
 

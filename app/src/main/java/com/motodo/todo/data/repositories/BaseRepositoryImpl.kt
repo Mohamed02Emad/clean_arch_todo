@@ -1,47 +1,15 @@
 package com.motodo.todo.data.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import com.motodo.todo.data.source.TodoDao
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.repositories.BaseRepository
 import java.util.Date
 
-class BaseRepositoryImpl : BaseRepository{
+class BaseRepositoryImpl(val dao : TodoDao) : BaseRepository{
+    override suspend fun getListForDate(year : Int , month :Int , day:Int): List<ToDo> = dao.getTodosByDate(year, month, day)
 
-    override suspend fun getListForDate(date: Date): LiveData<List<ToDo>> {
-        val todos  = MutableLiveData<List<ToDo>>()
-        todos.value = listOf(
-            ToDo(
-                0,
-                "Task 1",
-                false ,
-                "§1",
-                false,
-                date
-            ),
-            ToDo(
-                1,
-                "Task 2",
-                false ,
-                "2",
-                false,
-                date
-            ),
-            ToDo(
-                2,
-                "Task 3",
-                false ,
-                " 3",
-                false,
-                date
-            )
-        )
-        return todos
-    }
+    override suspend fun insertUpdateToDo(todo: ToDo) = dao.insertAndUpdateTodo(todo)
 
-    override suspend fun insertToDo(todo: ToDo) {
-    }
+    override suspend fun deleteToDo(todo: ToDo) = dao.deleteTodo(todo)
 
-    override suspend fun deleteToDo(todo: ToDo) {
-    }
 }

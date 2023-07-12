@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.motodo.todo.R
 import com.motodo.todo.domain.models.OnBoarding
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class OnBoardingViewModel : ViewModel() {
+@HiltViewModel
+class OnBoardingViewModel @Inject constructor(): ViewModel() {
 
     private val _currentPage: MutableLiveData<OnBoarding> = MutableLiveData()
     val currentPage: LiveData<OnBoarding> = _currentPage
@@ -28,7 +31,6 @@ class OnBoardingViewModel : ViewModel() {
             null
         } else {
             onBoardings[currentPage-1]
-
         }
     }
 
