@@ -16,12 +16,18 @@ import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentHomeBinding
 import com.motodo.todo.presentation.recyclerViews.TodosAdapter
+import com.motodo.todo.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Date
 
 @AndroidEntryPoint
@@ -182,6 +188,7 @@ class HomeFragment : Fragment() {
         myAdapter = TodosAdapter()
         myAdapter.differ.submitList(viewModel.todos.value)
         binding.rvTodos.adapter = myAdapter
+        setupSwipeToDelete()
     }
 
     private fun setObservers() {
@@ -189,7 +196,7 @@ class HomeFragment : Fragment() {
 
             todos.observe(viewLifecycleOwner) { newList ->
                 myAdapter.differ.submitList(newList)
-                Toast.makeText(requireContext(), newList?.size.toString() , Toast.LENGTH_SHORT).show()
+              //  Toast.makeText(requireContext(), newList?.size.toString() , Toast.LENGTH_SHORT).show()
             }
 
             isBottomSheetOpened.observe(viewLifecycleOwner) { state ->
@@ -216,6 +223,24 @@ class HomeFragment : Fragment() {
             includeCurrentDate = true
             init()
             select(0)
+        }
+    }
+
+    private fun setupSwipeToDelete() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback =
+            object : SwipeToDeleteCallback(requireContext()) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                    removeAfterSwiped(viewHolder)
+                }
+            }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rvTodos)
+    }
+
+    private fun removeAfterSwiped(viewHolder: RecyclerView.ViewHolder) {
+        val item =   myAdapter.differ.currentList[viewHolder.adapterPosition]
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.deleteTodos(item)
         }
     }
 

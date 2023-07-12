@@ -159,6 +159,11 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
         }
     }
 
+    suspend fun deleteTodos(item: ToDo) {
+         useCases.deleteTodoUseCase(item)
+        updateTodosList(currentDate.value!!)
+    }
+
 
     val myCalendarViewManager = object : CalendarViewManager {
         override fun setCalendarViewResourceId(
