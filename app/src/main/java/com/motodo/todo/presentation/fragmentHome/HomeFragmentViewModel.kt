@@ -79,10 +79,10 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
     fun setNotifyBefore(notifyBefore: CharSequence) {
         _notifyBefore.value =
             when (notifyBefore) {
-                "In 24 hours" -> {
+                "1 day" -> {
                     RemindBefroeTime.ONE_DAY
                 }
-                "1 hour before" -> {
+                "1 hour" -> {
                    RemindBefroeTime.ONE_HOUR
                 }
                 else -> {
