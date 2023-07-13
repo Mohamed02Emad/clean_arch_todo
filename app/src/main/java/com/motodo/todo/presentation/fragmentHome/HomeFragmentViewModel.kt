@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
@@ -50,6 +51,9 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
 
     private val _priority = MutableLiveData<Priority>(Priority.NONE)
     val priority: LiveData<Priority> = _priority
+
+    private val _removedTodo = MutableLiveData<ToDo?>(null)
+    val removedTodo: LiveData<ToDo?> = _removedTodo
 
     fun resetInsertTodoData() {
         _hasAlarm.value = true
@@ -160,8 +164,21 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
     }
 
     suspend fun deleteTodos(item: ToDo) {
-         useCases.deleteTodoUseCase(item)
+        useCases.deleteTodoUseCase(item)
         updateTodosList(currentDate.value!!)
+        withContext(Dispatchers.Main){
+            _removedTodo.value = item
+        }
+    }
+
+    suspend fun undoDeletion() {
+        if (removedTodo.value != null) {
+            useCases.insertUpdateTodoUseCase(removedTodo.value!!)
+            updateTodosList(currentDate.value!!)
+            withContext(Dispatchers.Main) {
+                _removedTodo.value = null
+            }
+        }
     }
 
 

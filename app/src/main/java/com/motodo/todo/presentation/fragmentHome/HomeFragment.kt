@@ -1,5 +1,6 @@
 package com.motodo.todo.presentation.fragmentHome
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentHomeBinding
@@ -238,10 +240,30 @@ class HomeFragment : Fragment() {
     }
 
     private fun removeAfterSwiped(viewHolder: RecyclerView.ViewHolder) {
-        val item =   myAdapter.differ.currentList[viewHolder.adapterPosition]
+        val item = myAdapter.differ.currentList[viewHolder.adapterPosition]
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.deleteTodos(item)
+            showUndoSnackbar()
         }
+    }
+
+    private fun showUndoSnackbar() {
+        val snackbar = Snackbar.make(
+            binding.rvTodos,
+            "Todo deleted",
+            Snackbar.LENGTH_LONG
+        )
+
+        snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.primary_red))
+        snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_blue))
+        snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.color_dialog))
+        snackbar.setAction("Undo") {
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.undoDeletion()
+            }
+            snackbar.dismiss()
+        }
+        snackbar.show()
     }
 
 }

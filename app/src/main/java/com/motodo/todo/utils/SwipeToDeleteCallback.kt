@@ -33,7 +33,7 @@ abstract class SwipeToDeleteCallback(context: Context) :
     init {
         mContext = context
         mBackground = ColorDrawable()
-        backgroundColor = Color.parseColor("#ffffff")
+        backgroundColor = Color.parseColor("#FFE2E6")
         mClearPaint = Paint()
         mClearPaint!!.xfermode = PorterDuffXfermode(PorterDuff.Mode.CLEAR)
         deleteDrawable = ContextCompat.getDrawable(mContext!!, R.drawable.ic_delete)
@@ -126,6 +126,15 @@ abstract class SwipeToDeleteCallback(context: Context) :
         val deleteIconBottom = deleteIconTop + intrinsicHeight
         deleteDrawable!!.setBounds(deleteIconLeft, deleteIconTop, deleteIconRight, deleteIconBottom)
         deleteDrawable!!.draw(c)
+
+        val threshold = 0.2f // Set the threshold value (adjust as needed)
+
+        if (dX < 0 && -dX > threshold * itemView.width) {
+            // Limit the swipe distance to the threshold
+            val adjustedDX = -threshold * itemView.width
+            super.onChildDraw(c, recyclerView, viewHolder, adjustedDX, dY, actionState, isCurrentlyActive)
+        }
+
     }
 
     fun Int.dp(): Int = (this * Resources.getSystem().displayMetrics.density).toInt()
@@ -136,7 +145,7 @@ abstract class SwipeToDeleteCallback(context: Context) :
     }
 
     override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
-        return 0.7f
+        return 0.2f
     }
 }
 

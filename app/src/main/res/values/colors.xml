@@ -20,4 +20,7 @@
     <color name="primary_grey">#B4B4C6</color>
     <color name="secondary_grey">#F0F0F7</color>
 
+    <color name="color_dialog">#F08280FF</color>
+
+
 </resources>
