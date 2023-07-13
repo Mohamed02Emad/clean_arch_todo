@@ -74,4 +74,6 @@ dependencies {
     //row calendar
     implementation ("com.michalsvec:single-row-calednar:1.0.0")
 
+    //dataStore
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 }

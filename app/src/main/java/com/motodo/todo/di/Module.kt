@@ -3,6 +3,7 @@ package com.motodo.todo.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
+import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
 import com.motodo.todo.data.repositories.BaseRepositoryImpl
 import com.motodo.todo.data.source.TodoDataBase
 import com.motodo.todo.domain.useCases.DeleteTodoUseCase
@@ -46,4 +47,13 @@ object Module {
             InsertUpdateTodoUseCase(repository)
         )
     }
+
+    @Provides
+    @Singleton
+    fun provideDataStore(
+        @ApplicationContext appContext: Context
+    ): DataStoreImpl {
+        return DataStoreImpl(appContext)
+    }
+
 }

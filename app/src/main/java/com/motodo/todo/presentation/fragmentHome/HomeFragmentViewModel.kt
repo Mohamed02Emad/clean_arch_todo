@@ -18,6 +18,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.Date
 import javax.inject.Inject
 
@@ -50,6 +51,9 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
 
     private val _priority = MutableLiveData<Priority>(Priority.NONE)
     val priority: LiveData<Priority> = _priority
+
+    private val _removedTodo = MutableLiveData<ToDo?>(null)
+    val removedTodo: LiveData<ToDo?> = _removedTodo
 
     fun resetInsertTodoData() {
         _hasAlarm.value = true
@@ -142,9 +146,9 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
             title = title.value!!,
             hasAlarm = hasAlarm.value!!,
             alarmTime = if (hasAlarm.value!!) alarmTime.value!! else null,
-            year = date.year,
-            month = date.month,
-            day = date.day,
+            year = DateHelper.getYearName(date),
+            month = DateHelper.getMonthName(date),
+            day = DateHelper.getDay(date),
             remindBefore = if (hasNotifyEnabled.value!!) notifyBefore.value!! else RemindBefroeTime.DO_NOT,
             priority = priority.value!!
         )
@@ -156,6 +160,24 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
         viewModelScope.launch(Dispatchers.IO) {
             useCases.insertUpdateTodoUseCase(todo)
             updateTodosList(currentDate.value!!)
+        }
+    }
+
+    suspend fun deleteTodos(item: ToDo) {
+        useCases.deleteTodoUseCase(item)
+        updateTodosList(currentDate.value!!)
+        withContext(Dispatchers.Main){
+            _removedTodo.value = item
+        }
+    }
+
+    suspend fun undoDeletion() {
+        if (removedTodo.value != null) {
+            useCases.insertUpdateTodoUseCase(removedTodo.value!!)
+            updateTodosList(currentDate.value!!)
+            withContext(Dispatchers.Main) {
+                _removedTodo.value = null
+            }
         }
     }
 

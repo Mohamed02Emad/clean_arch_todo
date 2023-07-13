@@ -6,7 +6,7 @@ import com.motodo.todo.domain.repositories.BaseRepository
 import java.util.Date
 
 class BaseRepositoryImpl(val dao : TodoDao) : BaseRepository{
-    override suspend fun getListForDate(year : Int , month :Int , day:Int): List<ToDo> = dao.getTodosByDate(year, month, day)
+    override suspend fun getListForDate(year : String , month :String , day:String): List<ToDo> = dao.getTodosByDate(year, month, day)
 
     override suspend fun insertUpdateToDo(todo: ToDo) = dao.insertAndUpdateTodo(todo)
 

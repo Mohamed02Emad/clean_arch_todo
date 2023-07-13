@@ -8,11 +8,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentOnBoardingBinding
 import com.motodo.todo.domain.models.OnBoarding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class OnBoardingFragment : Fragment() {
@@ -30,8 +36,16 @@ class OnBoardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setObservers()
-        setOnClicks()
+        lifecycleScope.launch {
+
+            if(viewModel.isOnBoardingFinished()){
+                findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToHomeFragment())
+            }else{
+                setObservers()
+                setOnClicks()
+            }
+
+        }
     }
 
     private fun setObservers() {
@@ -57,6 +71,9 @@ class OnBoardingFragment : Fragment() {
 
         binding.btnGetStarted.setOnClickListener {
             findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToHomeFragment())
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.setIsOnBoardingFinished(true)
+            }
         }
     }
 
