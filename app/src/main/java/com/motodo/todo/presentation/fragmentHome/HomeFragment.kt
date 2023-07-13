@@ -253,7 +253,6 @@ class HomeFragment : Fragment() {
             "Todo deleted",
             Snackbar.LENGTH_LONG
         )
-
         snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.primary_red))
         snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_blue))
         snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.color_dialog))

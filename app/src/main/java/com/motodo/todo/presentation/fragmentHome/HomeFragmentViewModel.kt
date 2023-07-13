@@ -146,9 +146,9 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
             title = title.value!!,
             hasAlarm = hasAlarm.value!!,
             alarmTime = if (hasAlarm.value!!) alarmTime.value!! else null,
-            year = date.year,
-            month = date.month,
-            day = date.day,
+            year = DateHelper.getYearName(date),
+            month = DateHelper.getMonthName(date),
+            day = DateHelper.getDay(date),
             remindBefore = if (hasNotifyEnabled.value!!) notifyBefore.value!! else RemindBefroeTime.DO_NOT,
             priority = priority.value!!
         )

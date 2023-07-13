@@ -10,7 +10,7 @@ import com.motodo.todo.domain.models.ToDo
 @Dao
 interface TodoDao {
     @Query("select * from ToDo where year = :year and month = :month and day = :day")
-     fun getTodosByDate(year: Int , month : Int , day : Int) : List<ToDo>
+     fun getTodosByDate(day: String , month : String , year : String) : List<ToDo>
     @Delete
     suspend fun deleteTodo(todo: ToDo)
     @Insert(onConflict = OnConflictStrategy.REPLACE)

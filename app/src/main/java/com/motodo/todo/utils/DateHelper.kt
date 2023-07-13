@@ -1,5 +1,6 @@
 package com.motodo.todo.utils
 
+import android.text.format.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -78,22 +79,27 @@ object DateHelper {
     }
 
     fun getDayName(date: Date): String {
-        val text = android.text.format.DateFormat.format("EE", date)
+        val text = DateFormat.format("EE", date)
         return text.toString()
     }
 
     fun getDay(date: Date): String {
-        val text = android.text.format.DateFormat.format("dd", date)
+        val text = DateFormat.format("dd", date)
         return text.toString()
     }
 
     fun getDayLetter(date: Date): String {
-        val text = android.text.format.DateFormat.format("EE", date)
+        val text = DateFormat.format("EE", date)
         return text[0].toString()
     }
 
     fun getMonthName(date: Date): String {
-        val text = android.text.format.DateFormat.format("MMMM", date)
+        val text = DateFormat.format("MMMM", date)
+        return text.toString()
+    }
+
+    fun getYearName(date: Date): String {
+        val text = DateFormat.format("yyyy", date)
         return text.toString()
     }
 }

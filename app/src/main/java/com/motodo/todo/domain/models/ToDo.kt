@@ -11,9 +11,9 @@ data class ToDo(
     var hasAlarm : Boolean = false,
     var alarmTime : String? = null,
     var isChecked : Boolean = false,
-    var year : Int = 2023,
-    var month : Int = 1,
-    var day : Int = 1,
+    var year : String = "2023",
+    var month : String = "1",
+    var day : String = "1",
     var remindBefore : RemindBefroeTime = RemindBefroeTime.DO_NOT,
     var priority: Priority = Priority.NONE
 )

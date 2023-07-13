@@ -5,7 +5,7 @@ import com.motodo.todo.domain.models.ToDo
 import java.util.Date
 
 interface BaseRepository {
-    suspend fun getListForDate(year : Int , month : Int , day :Int ): List<ToDo>
+    suspend fun getListForDate(year : String , month : String , day :String ): List<ToDo>
 
     suspend fun insertUpdateToDo(todo: ToDo)
 
