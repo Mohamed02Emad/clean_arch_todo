@@ -61,11 +61,10 @@ dependencies {
     annotationProcessor("androidx.room:room-compiler:$room_version")
     kapt ("androidx.room:room-compiler:$room_version")
 
-//    //navigation
+   //navigation
     val nav_version = "2.6.0"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-
 
     //hilt
     implementation("com.google.dagger:hilt-android:2.44")
@@ -76,4 +75,7 @@ dependencies {
 
     //dataStore
     implementation("androidx.datastore:datastore-preferences:1.0.0")
+
+    //splash
+    implementation("androidx.core:core-splashscreen:1.0.1")
 }

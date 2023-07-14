@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_graph"
-    app:startDestination="@id/onBoardingFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/onBoardingFragment"
         android:name="com.motodo.todo.presentation.fragmentOnBoarding.OnBoardingFragment"
@@ -11,12 +11,31 @@
         <action
             android:id="@+id/action_onBoardingFragment_to_homeFragment"
             app:destination="@id/homeFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"
             app:popUpTo="@id/home_graph"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="true"  />
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.motodo.todo.presentation.fragmentHome.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.motodo.todo.presentation.fragmentSplash.SplashFragment"
+        android:label="SplashFragment" >
+        <action
+            android:id="@+id/action_splashFragment_to_onBoardingFragment"
+            app:destination="@id/onBoardingFragment"
+            app:popUpTo="@id/home_graph"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_homeFragment"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/home_graph"
+            app:popUpToInclusive="true"/>
+    </fragment>
 </navigation>

@@ -6,7 +6,9 @@
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:navigationBarColor">@color/white</item>
-
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/primary_blue</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/icon</item>
+        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">300</item>
     </style>
 
     <style name="Theme.Todo" parent="Base.Theme.Todo" />
