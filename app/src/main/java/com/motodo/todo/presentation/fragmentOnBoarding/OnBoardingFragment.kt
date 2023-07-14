@@ -36,16 +36,8 @@ class OnBoardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        lifecycleScope.launch {
-
-            if(viewModel.isOnBoardingFinished()){
-                findNavController().navigate(OnBoardingFragmentDirections.actionOnBoardingFragmentToHomeFragment())
-            }else{
                 setObservers()
                 setOnClicks()
-            }
-
-        }
     }
 
     private fun setObservers() {

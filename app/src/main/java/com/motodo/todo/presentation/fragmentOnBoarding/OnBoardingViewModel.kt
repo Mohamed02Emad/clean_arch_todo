@@ -26,10 +26,6 @@ class OnBoardingViewModel @Inject constructor(val dataStoreImpl: DataStoreImpl):
         _currentPage.value= onBoardings[0]
     }
 
-    suspend fun isOnBoardingFinished() : Boolean= withContext(Dispatchers.IO){
-        dataStoreImpl.getIsOnBoardingFinished()
-    }
-
     suspend fun setIsOnBoardingFinished(isOnBoardingFinished: Boolean) = withContext(Dispatchers.IO){
         dataStoreImpl.setIsOnBoardingFinished(isOnBoardingFinished)
     }
