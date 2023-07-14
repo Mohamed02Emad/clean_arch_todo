@@ -1,5 +1,6 @@
 package com.motodo.todo.presentation.fragmentSplash
 
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -7,12 +8,12 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.splashscreen.SplashScreen
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
 import com.motodo.todo.R
+import com.motodo.todo.presentation.MainActivity
 import com.motodo.todo.utils.Constants.SPLASH_DELAY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -22,33 +23,37 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class SplashFragment : Fragment() {
 
-    @Inject
-    lateinit var dataStore: DataStoreImpl
+    var systemVersion : Int? = null
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
-
-        return inflater.inflate(R.layout.fragment_splash, container, false)
+        return if (systemVersion!! >  31) {
+            null
+        }else {
+            inflater.inflate(R.layout.fragment_splash, container, false)
+        }
     }
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        systemVersion = Build.VERSION.SDK_INT
+        if (systemVersion!! > 31) {
+            handleDirections()
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val apiLevel = Build.VERSION.SDK_INT
-        if (apiLevel > Build.VERSION_CODES.S) {
-            handleDirections()
-        } else {
+        (activity as MainActivity). handleFullScreen()
             Handler(Looper.getMainLooper()).postDelayed({
                 handleDirections()
             }, SPLASH_DELAY)
-        }
     }
 
     private fun handleDirections() {
         lifecycleScope.launch {
-            if (isOnBoardingFinished()) {
+            if ((activity as MainActivity).isOnBoardingFinished()) {
                 openHomeFragment()
             } else {
                 openOnBoardingFragment()
@@ -64,7 +69,8 @@ class SplashFragment : Fragment() {
         findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeFragment())
     }
 
-    private suspend fun isOnBoardingFinished(): Boolean {
-        return dataStore.getIsOnBoardingFinished()
+    override fun onDetach() {
+        super.onDetach()
+        (activity as MainActivity).undoFullScreen()
     }
 }
