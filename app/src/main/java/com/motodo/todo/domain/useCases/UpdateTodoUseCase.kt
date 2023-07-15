@@ -5,8 +5,8 @@ import com.motodo.todo.domain.models.ToDo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class InsertUpdateTodoUseCase(private val repository: BaseRepositoryImpl){
+class UpdateTodoUseCase (val repositoryImpl: BaseRepositoryImpl){
     suspend operator fun invoke(todo: ToDo) = withContext(Dispatchers.IO) {
-         repository.dao.insertAndUpdateTodo(todo)
+        repositoryImpl.dao.updateTodo(todo)
     }
 }

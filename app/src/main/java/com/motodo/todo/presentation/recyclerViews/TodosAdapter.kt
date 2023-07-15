@@ -1,9 +1,7 @@
 package com.motodo.todo.presentation.recyclerViews
 
-import android.annotation.SuppressLint
-import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -15,7 +13,7 @@ import com.motodo.todo.databinding.CardTodoBinding
 import com.motodo.todo.domain.models.Priority
 import com.motodo.todo.domain.models.ToDo
 
-class TodosAdapter : RecyclerView.Adapter<TodosAdapter.TodosViewHolder>() {
+class TodosAdapter(val onCheckClicked: (ToDo , Int ) -> Unit) : RecyclerView.Adapter<TodosAdapter.TodosViewHolder>() {
 
     private val differCallBack = object : DiffUtil.ItemCallback<ToDo>() {
         override fun areItemsTheSame(oldItem: ToDo, newItem: ToDo): Boolean {
@@ -48,11 +46,17 @@ class TodosAdapter : RecyclerView.Adapter<TodosAdapter.TodosViewHolder>() {
         holder.binding.tvTitle.text = todo.title
         holder.binding.tvTime.text = todo.alarmTime ?: ""
 
-        holder.binding.ivCheck.setImageResource(
-            // wrong names that's why i used !
-            if(!todo.isChecked) R.drawable.ic_check_circle
-            else R.drawable.ic_check
-        )
+        holder.binding.ivCheck.apply {
+            setImageResource(
+                // wrong names that's why i used !
+                if(!todo.isChecked) R.drawable.ic_check_circle
+                else R.drawable.ic_check
+            )
+
+            setOnClickListener{
+                onCheckClicked(todo , position)
+            }
+        }
 
         holder.binding.cardBackground.background = if (todo.isChecked) {
             ContextCompat.getDrawable(holder.binding.cardBackground.context, R.drawable.card_checked)
