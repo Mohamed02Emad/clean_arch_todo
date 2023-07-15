@@ -9,6 +9,10 @@ interface BaseRepository {
 
     suspend fun insertUpdateToDo(todo: ToDo)
 
+    fun getAllPreviousTodos(): List<ToDo>
+
     suspend fun deleteToDo(todo: ToDo)
+
+    suspend fun updateTodos(todo: ToDo)
 
 }

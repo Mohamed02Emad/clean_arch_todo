@@ -1,6 +1,5 @@
 package com.motodo.todo.presentation.fragmentHome
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +16,8 @@ import androidx.core.view.isGone
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -24,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.motodo.todo.R
 import com.motodo.todo.databinding.FragmentHomeBinding
+import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.presentation.recyclerViews.TodosAdapter
 import com.motodo.todo.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,7 +61,22 @@ class HomeFragment : Fragment() {
         binding.btnAddNewTodo.setOnClickListener {
             openBottomSheet()
         }
+        binding.btnSettings.setOnClickListener {
+            goToSettingsFragment()
+        }
+        binding.btnPreviousFragment.setOnClickListener {
+            goToPreviousFragment()
+        }
     }
+
+    private fun goToPreviousFragment() {
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToPreviousFragment())
+    }
+
+    private fun goToSettingsFragment() {
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToSettingsFragment())
+    }
+
     private fun openBottomSheet() {
         val dialog = BottomSheetDialog(requireContext())
         dialog.setContentView(R.layout.bottom_sheet_add_todo)
@@ -187,7 +204,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        myAdapter = TodosAdapter()
+        myAdapter = TodosAdapter { todo , position ->
+            triggerTodoChecked(todo , position)
+            myAdapter.notifyItemChanged(position)
+        }
         myAdapter.differ.submitList(viewModel.todos.value)
         binding.rvTodos.adapter = myAdapter
         setupSwipeToDelete()
@@ -198,7 +218,6 @@ class HomeFragment : Fragment() {
 
             todos.observe(viewLifecycleOwner) { newList ->
                 myAdapter.differ.submitList(newList)
-              //  Toast.makeText(requireContext(), newList?.size.toString() , Toast.LENGTH_SHORT).show()
             }
 
             isBottomSheetOpened.observe(viewLifecycleOwner) { state ->
@@ -263,6 +282,13 @@ class HomeFragment : Fragment() {
             snackbar.dismiss()
         }
         snackbar.show()
+    }
+
+    private fun triggerTodoChecked(todo: ToDo , position: Int) {
+        todo.isChecked = !todo.isChecked
+        lifecycleScope.launch {
+            viewModel.updateTodo(todo , position)
+        }
     }
 
 }

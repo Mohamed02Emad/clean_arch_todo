@@ -22,7 +22,22 @@
         android:id="@+id/homeFragment"
         android:name="com.motodo.todo.presentation.fragmentHome.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out" />
+        <action
+            android:id="@+id/action_homeFragment_to_previousFragment"
+            app:destination="@id/previousFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/fade_in"
+            app:popExitAnim="@android:anim/fade_out"/>
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.motodo.todo.presentation.fragmentSplash.SplashFragment"
@@ -42,4 +57,14 @@
             app:popUpTo="@id/home_graph"
             app:popUpToInclusive="true" />
     </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.motodo.todo.presentation.fragmentSerrings.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/previousFragment"
+        android:name="com.motodo.todo.presentation.fragmentPrevious.PreviousFragment"
+        android:label="fragment_previous"
+        tools:layout="@layout/fragment_previous" />
 </navigation>

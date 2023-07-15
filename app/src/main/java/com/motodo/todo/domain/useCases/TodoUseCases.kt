@@ -3,5 +3,7 @@ package com.motodo.todo.domain.useCases
 data class TodoUseCases (
     val deleteTodoUseCase: DeleteTodoUseCase,
     val getTodosUseCase: GetDateToDosUseCase,
-    val insertUpdateTodoUseCase: InsertUpdateTodoUseCase
+    val insertTodoUseCase: InsertTodoUseCase,
+    val getPreviousTodosUseCase: GetPreviousTodosUseCase,
+    val updateTodoUseCase: UpdateTodoUseCase
 )

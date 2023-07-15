@@ -2,6 +2,7 @@ package com.motodo.todo.utils
 
 import android.text.format.DateFormat
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
@@ -98,8 +99,17 @@ object DateHelper {
         return text.toString()
     }
 
+
+    fun getMonthIndex(date: Date): String {
+        val calendar = Calendar.getInstance()
+        calendar.time = date
+        val monthIndex = calendar.get(Calendar.MONTH)
+        return (monthIndex).toString()
+    }
+
     fun getYearName(date: Date): String {
         val text = DateFormat.format("yyyy", date)
         return text.toString()
     }
+
 }

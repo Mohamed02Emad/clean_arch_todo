@@ -1,6 +1,5 @@
 package com.motodo.todo.di
 
-import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
@@ -8,8 +7,10 @@ import com.motodo.todo.data.repositories.BaseRepositoryImpl
 import com.motodo.todo.data.source.TodoDataBase
 import com.motodo.todo.domain.useCases.DeleteTodoUseCase
 import com.motodo.todo.domain.useCases.GetDateToDosUseCase
-import com.motodo.todo.domain.useCases.InsertUpdateTodoUseCase
+import com.motodo.todo.domain.useCases.GetPreviousTodosUseCase
+import com.motodo.todo.domain.useCases.InsertTodoUseCase
 import com.motodo.todo.domain.useCases.TodoUseCases
+import com.motodo.todo.domain.useCases.UpdateTodoUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +45,9 @@ object Module {
         return TodoUseCases(
             DeleteTodoUseCase(repository),
             GetDateToDosUseCase(repository),
-            InsertUpdateTodoUseCase(repository)
+            InsertTodoUseCase(repository),
+            GetPreviousTodosUseCase(repository),
+            UpdateTodoUseCase(repository)
         )
     }
 

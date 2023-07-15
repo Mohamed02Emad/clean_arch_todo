@@ -147,7 +147,7 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
             hasAlarm = hasAlarm.value!!,
             alarmTime = if (hasAlarm.value!!) alarmTime.value!! else null,
             year = DateHelper.getYearName(date),
-            month = DateHelper.getMonthName(date),
+            month = DateHelper.getMonthIndex(date),
             day = DateHelper.getDay(date),
             remindBefore = if (hasNotifyEnabled.value!!) notifyBefore.value!! else RemindBefroeTime.DO_NOT,
             priority = priority.value!!
@@ -158,7 +158,7 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
 
     private fun saveTodoToDatabase(todo: ToDo) {
         viewModelScope.launch(Dispatchers.IO) {
-            useCases.insertUpdateTodoUseCase(todo)
+            useCases.insertTodoUseCase(todo)
             updateTodosList(currentDate.value!!)
         }
     }
@@ -173,12 +173,17 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
 
     suspend fun undoDeletion() {
         if (removedTodo.value != null) {
-            useCases.insertUpdateTodoUseCase(removedTodo.value!!)
+            useCases.insertTodoUseCase(removedTodo.value!!)
             updateTodosList(currentDate.value!!)
             withContext(Dispatchers.Main) {
                 _removedTodo.value = null
             }
         }
+    }
+
+    suspend fun updateTodo(todo: ToDo , index: Int) {
+        useCases.updateTodoUseCase(todo)
+        _todos.value?.set(index, todo)
     }
 
 

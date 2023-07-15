@@ -20,17 +20,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/btn_settings"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+        android:src="@drawable/ic_settings"
+        app:tint = "@color/primary_grey"
+        />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/btn_previous_fragment"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        app:layout_constraintTop_toTopOf="@id/tv_title"
+        app:layout_constraintBottom_toBottomOf="@id/tv_title"
+        app:layout_constraintEnd_toStartOf="@id/btn_settings"
+        android:layout_marginEnd="16dp"
+        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+        android:src="@drawable/ic_check_circle"
+        app:tint = "@color/primary_grey"
+        />
+
         <com.michalsvec.singlerowcalendar.calendar.SingleRowCalendar
             app:layout_constraintTop_toBottomOf="@id/tv_title"
             android:id="@+id/main_single_row_calendar"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:elevation="2dp"
-            android:paddingVertical="4dp"
+            android:elevation="1dp"
+            android:paddingVertical="12dp"
             android:paddingHorizontal="16dp"
-            android:clipToPadding="true"
+            android:clipToPadding="false"
             app:deselection="false"
             app:longPress="false"
             app:multiSelection="false" />

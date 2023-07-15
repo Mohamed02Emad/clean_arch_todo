@@ -13,7 +13,7 @@ class GetDateToDosUseCase(private val repository: BaseRepositoryImpl) {
     suspend operator fun invoke(date: Date): ArrayList<ToDo> = withContext(Dispatchers.IO) {
         val arr = ArrayList<ToDo>()
 
-        arr.addAll(repository.dao.getTodosByDate(DateHelper.getDay(date),DateHelper.getMonthName(date) ,DateHelper.getYearName(date)))
+        arr.addAll(repository.dao.getTodosByDate(DateHelper.getDay(date),DateHelper.getMonthIndex(date) ,DateHelper.getYearName(date)))
         sortArrayByPriority(arr)
     }
 
