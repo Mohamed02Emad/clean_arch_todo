@@ -1,7 +1,9 @@
 package com.motodo.todo.presentation
 
 import android.app.ProgressDialog.show
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -23,6 +25,13 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var dataStore: DataStoreImpl
 
+    private val pushPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+        }
+    }
+
     private var isOnBoardingFinished : Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +40,7 @@ class MainActivity : AppCompatActivity() {
             isOnBoardingFinished = dataStore.getIsOnBoardingFinished()
         }
         setContentView(R.layout.activity_main)
+        requestForPermission()
     }
 
     fun undoFullScreen() {
@@ -53,4 +63,10 @@ class MainActivity : AppCompatActivity() {
         return isOnBoardingFinished ?: dataStore.getIsOnBoardingFinished()
     }
 
+    private fun requestForPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            pushPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        }
+        pushPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    }
 }
