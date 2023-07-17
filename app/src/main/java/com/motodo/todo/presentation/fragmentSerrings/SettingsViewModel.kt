@@ -46,22 +46,7 @@ class SettingsViewModel @Inject constructor(val useCases: TodoUseCases) : ViewMo
         return null
     }
 
-    fun getUriOfCachedAudio(context: Context): Uri? {
-        return try {
-            val audioLocation = context.filesDir.absolutePath + File.separator + "alarm_audio.mp3"
-            val cacheFile = File(audioLocation)
-            if (!cacheFile.exists()) {
-                Log.d("mohamed", "no file")
-                null
-            } else {
-                Log.d("mohamed", "no problem")
-                Uri.parse(cacheFile.absolutePath)
-            }
-        } catch (e: Exception) {
-            Log.d("mohamed", e.message.toString())
-            null
-        }
-    }
+
 
 
 }

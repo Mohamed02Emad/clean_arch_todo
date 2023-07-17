@@ -20,8 +20,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
-    private var mediaPlayer: MediaPlayer? = null
-
     private lateinit var binding: FragmentSettingsBinding
     private val viewModel: SettingsViewModel by viewModels()
     override fun onCreateView(
@@ -35,30 +33,6 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClicks()
-        setMediaPlayers()
-    }
-
-    private fun setMediaPlayers() {
-
-        // use this logic in the alarm code
-        mediaPlayer = MediaPlayer()
-
-        mediaPlayer?.setAudioAttributes(
-            AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_MEDIA)
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build()
-        )
-        val audioUri = viewModel.getUriOfCachedAudio(requireContext())
-
-        audioUri?.let {
-            mediaPlayer = MediaPlayer.create(requireContext(), audioUri)
-            mediaPlayer?.start()
-            mediaPlayer?.setOnCompletionListener {
-                mediaPlayer?.release()
-            }
-        }
-
     }
 
     private fun setOnClicks() {
@@ -88,10 +62,5 @@ class SettingsFragment : Fragment() {
                 viewModel.cacheAudioFromUri(uri, requireActivity())
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mediaPlayer?.release()
     }
 }

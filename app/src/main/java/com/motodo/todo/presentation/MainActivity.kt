@@ -1,21 +1,18 @@
 package com.motodo.todo.presentation
 
-import android.app.ProgressDialog.show
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
 import com.motodo.todo.R
+import com.motodo.todo.data.receivers.alarmReceiver.DailyCheckReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,11 +21,18 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var dataStore: DataStoreImpl
+    private val REQUEST_CODE_SCHEDULE_EXACT_ALARM = 1
 
     private val pushPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted) {
+        if (granted ) {
+        }
+    }
+    private val pushPermissionLauncherAlarm = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted ) {
         }
     }
 
@@ -41,6 +45,12 @@ class MainActivity : AppCompatActivity() {
         }
         setContentView(R.layout.activity_main)
         requestForPermission()
+        setDailyAlarm()
+
+    }
+
+    private fun setDailyAlarm() {
+        DailyCheckReceiver.setDailyCheck(this.applicationContext)
     }
 
     fun undoFullScreen() {
@@ -69,4 +79,5 @@ class MainActivity : AppCompatActivity() {
         }
         pushPermissionLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
     }
+
 }

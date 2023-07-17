@@ -57,6 +57,8 @@ class HomeFragment : Fragment() {
         setOnClickListeners()
     }
 
+
+
     private fun setOnClickListeners() {
         binding.btnAddNewTodo.setOnClickListener {
             openBottomSheet()
@@ -290,5 +292,6 @@ class HomeFragment : Fragment() {
             viewModel.updateTodo(todo , position)
         }
     }
+
 
 }
