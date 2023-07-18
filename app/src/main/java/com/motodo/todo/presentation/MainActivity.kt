@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
 import com.motodo.todo.R
 import com.motodo.todo.data.receivers.dailyCheck.DailyCheckReceiver
+import com.motodo.todo.data.receivers.todosAlarm.TodosAlarmReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,8 +26,8 @@ class MainActivity : AppCompatActivity() {
     private val pushPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
-        if (granted ) {
-        }
+//        if (granted ) {
+//        }
     }
 
     private var isOnBoardingFinished : Boolean? = null
@@ -44,6 +45,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setDailyAlarm() {
         DailyCheckReceiver.setDailyCheck(this.applicationContext)
+        val mediaPlayer = TodosAlarmReceiver.mediaPlayer
+        mediaPlayer?.let {
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.stop()
+                mediaPlayer.release()
+            }
+        }
     }
 
     fun undoFullScreen() {

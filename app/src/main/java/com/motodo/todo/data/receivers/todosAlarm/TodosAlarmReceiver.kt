@@ -5,30 +5,58 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import android.os.Build
-import android.util.Log
 import com.motodo.todo.domain.models.ToDo
-import com.motodo.todo.presentation.fragmentHome.TAG
 import com.motodo.todo.utils.createExactAlarm
 import com.motodo.todo.utils.getCalendarForTodoAlarm
+import com.motodo.todo.utils.getUriOfCachedAudio
 import com.motodo.todo.utils.showNotification
 
 class TodosAlarmReceiver : BroadcastReceiver() {
+
     override fun onReceive(context: Context?, intent: Intent?) {
         val todo: ToDo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-
             intent?.getSerializableExtra("todo", ToDo::class.java) as ToDo
         } else {
             intent?.getSerializableExtra("todo") as ToDo
         }
-
         try {
-            showNotification(context!!, todo.title, todo.id)
+            if (todo.hasAlarm) {
+                setMediaPlayers(context!!)
+            }
+            showNotification(context!!, todo.title, todo.id , todo.hasAlarm)
         } catch (_: Exception) {
         }
     }
 
+    private fun setMediaPlayers(context: Context) {
+
+        mediaPlayer = MediaPlayer()
+
+        mediaPlayer!!.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+        )
+        val audioUri = getUriOfCachedAudio(context)
+
+        audioUri?.let {
+            mediaPlayer = MediaPlayer.create(context, audioUri)
+            mediaPlayer!!.start()
+            mediaPlayer!!.setOnCompletionListener {
+                mediaPlayer!!.release()
+            }
+        }
+
+    }
+
     companion object {
+
+         var mediaPlayer: MediaPlayer? = null
+
         fun setTodoAlarm(context: Context, todo: ToDo) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, TodosAlarmReceiver::class.java)
@@ -46,4 +74,5 @@ class TodosAlarmReceiver : BroadcastReceiver() {
             createExactAlarm(calendar, alarmManager, pendingIntent)
         }
     }
+
 }

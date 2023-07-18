@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.motodo.todo.R
-import com.motodo.todo.domain.models.ToDo
+import com.motodo.todo.data.receivers.muteAlarmReceiver.MuteAlarmReceiver
 import com.motodo.todo.presentation.MainActivity
 import java.util.Calendar
 
@@ -23,7 +23,8 @@ fun isOldDate(day: Int, month: Int, year: Int): Boolean {
 fun showNotification(
     context: Context,
     title: String?,
-    reqCode: Int
+    reqCode: Int,
+    hasAlarm: Boolean
 ) {
 
     val intent = Intent(context, MainActivity::class.java)
@@ -32,22 +33,42 @@ fun showNotification(
     } else {
         PendingIntent.getActivity(
             context,
-            0,
+            reqCode,
             intent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 
+    val muteIntent = Intent(context, MuteAlarmReceiver::class.java).apply {
+        action = "ACTION_STOP_ALARM"
+    }
+    val stopAlarmPendingIntent: PendingIntent =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getBroadcast(context, reqCode, muteIntent, PendingIntent.FLAG_MUTABLE)
+        } else {
+            PendingIntent.getBroadcast(
+                context,
+                reqCode,
+                muteIntent,
+                PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE
+            )
+        }
+
     val CHANNEL_ID = "main_chanel"
 
     val notificationBuilder: NotificationCompat.Builder =
         NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.icon)
-            .setContentTitle(title)
-            .setContentText("Your alarm is here")
-            .setAutoCancel(true)
-            .setContentIntent(pendingIntent)
-            .setSound(null)
+    notificationBuilder.apply {
+        setSmallIcon(R.drawable.icon)
+        setContentTitle(title)
+        setContentText("Your alarm is here")
+        setAutoCancel(true)
+        setContentIntent(pendingIntent)
+        setSound(null)
+        if (hasAlarm) {
+            addAction(R.drawable.ic_alarm, "Stop Alarm", stopAlarmPendingIntent)
+        }
+    }
 
 
     val notificationManager =
@@ -65,3 +86,4 @@ fun showNotification(
     )
 
 }
+

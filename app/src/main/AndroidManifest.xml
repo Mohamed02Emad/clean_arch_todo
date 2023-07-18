@@ -30,6 +30,8 @@
 
         <receiver android:name=".data.receivers.todosAlarm.TodosAlarmReceiver" />
 
+        <receiver android:name=".data.receivers.muteAlarmReceiver.MuteAlarmReceiver" />
+
         <receiver
             android:name=".data.receivers.bootReceiver.BootReceiver"
             android:enabled="true"

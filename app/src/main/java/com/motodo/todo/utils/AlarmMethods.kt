@@ -2,8 +2,11 @@ package com.motodo.todo.utils
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
+import android.net.Uri
 import android.os.Build
 import com.motodo.todo.domain.models.ToDo
+import java.io.File
 import java.util.Calendar
 
 fun createExactAlarm(calendar: Calendar , alarmManager: AlarmManager , pendingIntent : PendingIntent){
@@ -59,3 +62,18 @@ fun getHour(todo: ToDo): Int {
     }
     return hour
 }
+
+fun getUriOfCachedAudio(context: Context): Uri? {
+    return try {
+        val audioLocation = context.filesDir.absolutePath + File.separator + "alarm_audio.mp3"
+        val cacheFile = File(audioLocation)
+        if (!cacheFile.exists()) {
+            null
+        } else {
+            Uri.parse(cacheFile.absolutePath)
+        }
+    } catch (e: Exception) {
+        null
+    }
+}
+

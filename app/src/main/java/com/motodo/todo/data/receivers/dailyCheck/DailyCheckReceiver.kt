@@ -31,9 +31,7 @@ class DailyCheckReceiver : BroadcastReceiver() {
             val currentDate = Date()
             val todos = useCases.getTodosUseCase(currentDate)
             for (todo in todos) {
-                if (todo.hasAlarm){
                     TodosAlarmReceiver.setTodoAlarm(context, todo)
-                }
             }
         }
         setDailyCheck(context)
