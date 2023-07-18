@@ -11,6 +11,7 @@ import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.presentation.fragmentHome.TAG
 import com.motodo.todo.utils.createExactAlarm
 import com.motodo.todo.utils.getCalendarForTodoAlarm
+import com.motodo.todo.utils.showNotification
 
 class TodosAlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
@@ -20,10 +21,10 @@ class TodosAlarmReceiver : BroadcastReceiver() {
         } else {
             intent?.getSerializableExtra("todo") as ToDo
         }
+
         try {
-            Log.d(TAG, "onReceive: task ${todo.title} ")
+            showNotification(context!!, todo.title, todo.id)
         } catch (_: Exception) {
-            Log.d(TAG, "onReceive: task but null ")
         }
     }
 
@@ -34,7 +35,6 @@ class TodosAlarmReceiver : BroadcastReceiver() {
             try {
                 intent.putExtra("todo", todo)
             } catch (_: Exception) {
-                Log.d(TAG, "cannot add todo to intent ")
                 return
             }
             val pendingIntent = PendingIntent.getBroadcast(

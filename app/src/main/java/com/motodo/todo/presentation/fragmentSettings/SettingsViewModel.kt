@@ -1,8 +1,7 @@
-package com.motodo.todo.presentation.fragmentSerrings
+package com.motodo.todo.presentation.fragmentSettings
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.motodo.todo.domain.useCases.TodoUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel

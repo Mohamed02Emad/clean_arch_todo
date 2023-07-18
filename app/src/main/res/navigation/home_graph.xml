@@ -59,7 +59,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.motodo.todo.presentation.fragmentSerrings.SettingsFragment"
+        android:name="com.motodo.todo.presentation.fragmentSettings.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment

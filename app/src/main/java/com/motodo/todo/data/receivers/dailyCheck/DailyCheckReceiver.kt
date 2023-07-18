@@ -5,25 +5,37 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.util.Log
 import android.widget.Toast
 import com.motodo.todo.data.receivers.todosAlarm.TodosAlarmReceiver
 import com.motodo.todo.domain.models.ToDo
+import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.presentation.fragmentHome.TAG
 import com.motodo.todo.utils.createExactAlarm
 import com.motodo.todo.utils.getCalendarForTomorrow
-import java.util.Calendar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Date
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DailyCheckReceiver : BroadcastReceiver() {
 
+    @Inject
+    lateinit var useCases: TodoUseCases
+
     override fun onReceive(context: Context, intent: Intent) {
-        Toast.makeText(context, "Alarm changed", Toast.LENGTH_SHORT).show()
-        Log.d(TAG, "Daily check started ")
-        val todo = ToDo()
-        todo.title = "task 1"
-        todo.alarmTime = "0:2 AM"
-        TodosAlarmReceiver.setTodoAlarm(context, todo)
+        CoroutineScope(Dispatchers.IO).launch {
+            val currentDate = Date()
+            val todos = useCases.getTodosUseCase(currentDate)
+            for (todo in todos) {
+                if (todo.hasAlarm){
+                    TodosAlarmReceiver.setTodoAlarm(context, todo)
+                }
+            }
+        }
         setDailyCheck(context)
     }
 
@@ -41,8 +53,6 @@ class DailyCheckReceiver : BroadcastReceiver() {
 
             val calendar = getCalendarForTomorrow()
             createExactAlarm(calendar, alarmManager, pendingIntent)
-
-            Log.d(TAG, "Daily check requested ")
         }
 
     }

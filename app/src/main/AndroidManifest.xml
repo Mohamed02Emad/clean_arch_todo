@@ -26,10 +26,18 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".data.receivers.dailyCheck.DailyCheckReceiver"
-            />
-        <receiver android:name=".data.receivers.todosAlarm.TodosAlarmReceiver"
-            />
+        <receiver android:name=".data.receivers.dailyCheck.DailyCheckReceiver" />
+
+        <receiver android:name=".data.receivers.todosAlarm.TodosAlarmReceiver" />
+
+        <receiver
+            android:name=".data.receivers.bootReceiver.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
