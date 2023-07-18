@@ -30,6 +30,14 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setOnClicks()
+        setObservers()
+        viewModel.myInit()
+    }
+
+    private fun setObservers() {
+        viewModel.alarmName.observe(viewLifecycleOwner) { name ->
+            binding.tvAlarmName.text = name
+        }
     }
 
     private fun setOnClicks() {

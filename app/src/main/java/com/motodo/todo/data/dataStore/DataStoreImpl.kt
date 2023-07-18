@@ -3,6 +3,7 @@ package com.mo_chatting.chatapp.data.dataStore
 import android.content.Context
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ class DataStoreImpl(
 
     companion object {
         const val ON_BOARDING = "onBoarding"
+        const val ALARM_NAME = "alarmName"
     }
 
     override suspend fun getIsOnBoardingFinished(): Boolean = withContext(dispatcher) {
@@ -36,6 +38,19 @@ class DataStoreImpl(
         withContext(dispatcher) {
             mDataStore.edit { settings ->
                 settings[booleanPreferencesKey(ON_BOARDING)] = isOnBoardingFinished
+            }
+        }
+    }
+
+    override suspend fun getAlarmName(): String = withContext(dispatcher) {
+        mDataStore.data.map { settings ->
+            settings[stringPreferencesKey(ALARM_NAME)] ?: "default"
+        }.first()
+    }
+    override suspend fun setAlarmName(alarmName: String) {
+        withContext(dispatcher) {
+            mDataStore.edit { settings ->
+                settings[stringPreferencesKey(ALARM_NAME)] = alarmName
             }
         }
     }

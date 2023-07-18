@@ -5,4 +5,8 @@ interface DataStore {
 
    suspend fun setIsOnBoardingFinished(isOnBoardingFinished:Boolean)
 
+   suspend fun getAlarmName():String
+
+   suspend fun setAlarmName(alarmName:String)
+
 }

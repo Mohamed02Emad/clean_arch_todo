@@ -55,21 +55,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="set alarm sound"
+            android:text="alarm sound"
             android:textColor="@color/primary_grey"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/tv_alarm_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
             android:ellipsize="end"
-            android:gravity="center"
+            android:gravity="start"
             android:maxLines="1"
-            android:text="sound alarm number one "
+            tools:text="sound alarm number one "
             android:textColor="@color/primary_blue"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <ImageView
             android:layout_width="30dp"
