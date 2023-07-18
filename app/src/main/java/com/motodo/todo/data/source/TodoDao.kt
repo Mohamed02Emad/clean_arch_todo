@@ -13,7 +13,7 @@ interface TodoDao {
     @Query("select * from ToDo where year = :year and month = :month and day = :day")
      fun getTodosByDate(day: String , month : String , year : String) : List<ToDo>
     @Query("SELECT * FROM ToDo ")
-    fun getAllPreviousTodos(): List<ToDo>
+    fun getAllTodos(): List<ToDo>
 
     @Delete
     suspend fun deleteTodo(todo: ToDo)

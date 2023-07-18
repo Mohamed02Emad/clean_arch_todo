@@ -52,6 +52,7 @@ class SplashFragment : Fragment() {
     }
 
     private fun handleDirections() {
+        (activity as MainActivity).undoFullScreen()
         lifecycleScope.launch {
             if ((activity as MainActivity).isOnBoardingFinished()) {
                 openHomeFragment()
@@ -69,8 +70,4 @@ class SplashFragment : Fragment() {
         findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToHomeFragment())
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        (activity as MainActivity).undoFullScreen()
-    }
 }

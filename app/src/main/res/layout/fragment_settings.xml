@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/color_background"
     tools:context=".presentation.fragmentSettings.SettingsFragment">
 
     <TextView
@@ -22,15 +22,15 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/btn_back"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ripple_with_background_color"
         android:layout_marginStart="16dp"
         android:src="@drawable/ic_back_arrow"
         app:layout_constraintBottom_toBottomOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_title"
-        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
-        app:tint="@color/black" />
+        app:shapeAppearanceOverlay="@style/roundedImageViewRounded" />
 
 
     <LinearLayout

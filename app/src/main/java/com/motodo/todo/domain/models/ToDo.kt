@@ -7,7 +7,7 @@ import java.util.Date
 
 @Entity
 data class ToDo(
-    @PrimaryKey(autoGenerate = true) val id: Int = 1,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     var title: String = "",
     var hasAlarm : Boolean = false,
     var alarmTime : String? = null,

@@ -69,7 +69,7 @@ class TodosAlarmReceiver : BroadcastReceiver() {
                 return
             }
             val pendingIntent = PendingIntent.getBroadcast(
-                context, todo.id, intent,
+                context, todo.id + 1, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
@@ -81,7 +81,7 @@ class TodosAlarmReceiver : BroadcastReceiver() {
             reminderCalendar?.let { reminderCalendar ->
                 intent.putExtra("use_alarm", false)
                 val reminderPendingIntent = PendingIntent.getBroadcast(
-                    context, -todo.id, intent,
+                    context, -(todo.id + 1), intent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
                 createExactAlarm(reminderCalendar, alarmManager, reminderPendingIntent)

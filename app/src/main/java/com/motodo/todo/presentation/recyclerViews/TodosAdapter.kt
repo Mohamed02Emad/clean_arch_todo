@@ -52,10 +52,11 @@ class TodosAdapter(val onCheckClicked: (ToDo , Int ) -> Unit) : RecyclerView.Ada
                 if(!todo.isChecked) R.drawable.ic_check_circle
                 else R.drawable.ic_check
             )
+        }
 
-            setOnClickListener{
-                onCheckClicked(todo , position)
-            }
+
+        holder.binding.cardBackground.setOnClickListener{
+            onCheckClicked(todo , position)
         }
 
         holder.binding.cardBackground.background = if (todo.isChecked) {

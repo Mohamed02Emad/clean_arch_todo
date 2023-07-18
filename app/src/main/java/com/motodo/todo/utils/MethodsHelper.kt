@@ -17,6 +17,13 @@ fun isOldDate(day: Int, month: Int, year: Int): Boolean {
     val inputDate = Calendar.getInstance()
     inputDate.set(year, month, day)
     val todayDate = Calendar.getInstance()
+    todayDate.apply {
+        timeInMillis = System.currentTimeMillis()
+        set(Calendar.HOUR_OF_DAY , 0)
+        set(Calendar.MINUTE , 0)
+        set(Calendar.SECOND , 0)
+    }
+
     return inputDate.before(todayDate)
 }
 
@@ -29,7 +36,7 @@ fun showNotification(
 
     val intent = Intent(context, MainActivity::class.java)
     val pendingIntent: PendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+        PendingIntent.getActivity(context, reqCode, intent, PendingIntent.FLAG_MUTABLE)
     } else {
         PendingIntent.getActivity(
             context,
