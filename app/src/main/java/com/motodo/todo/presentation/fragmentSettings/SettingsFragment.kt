@@ -1,9 +1,12 @@
-package com.motodo.todo.presentation.fragmentSerrings
+package com.motodo.todo.presentation.fragmentSettings
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -15,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
     private lateinit var binding: FragmentSettingsBinding
-    private val viewModel : SettingsViewModel by viewModels()
+    private val viewModel: SettingsViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,14 +39,25 @@ class SettingsFragment : Fragment() {
             }
 
             cardAlarm.setOnClickListener {
-                val newAlarmSound = getAlarmSound()
-                viewModel.setNewAlarmSound(newAlarmSound)
+                getAlarmSound()
             }
         }
     }
 
-    private fun getAlarmSound(): Any {
-      return 0
+    private fun getAlarmSound() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.setType("audio/*")
+        getAudioResult.launch(intent)
     }
 
+    private val getAudioResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val uri = result.data?.data
+            if (uri != null) {
+                viewModel.cacheAudioFromUri(uri, requireActivity())
+            }
+        }
+    }
 }

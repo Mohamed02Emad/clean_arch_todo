@@ -10,9 +10,9 @@ class GetPreviousTodosUseCase(private val repository: BaseRepositoryImpl) {
     suspend operator fun invoke(): ArrayList<ToDo> = withContext(Dispatchers.IO) {
         val arr = ArrayList<ToDo>()
         arr.addAll(
-            repository.dao.getAllPreviousTodos()
-                .filter { isOldDate(it.day.toInt(), it.month.toInt(), it.year.toInt())}
-                .sortedByDescending{it.id}
+            repository.dao.getAllTodos()
+                .filter { isOldDate(it.day.toInt(), it.month.toInt(), it.year.toInt()) }
+                .sortedByDescending { it.id }
         )
         arr
     }

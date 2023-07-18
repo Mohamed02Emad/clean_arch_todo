@@ -2,6 +2,7 @@ package com.motodo.todo.domain.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 import java.util.Date
 
 @Entity
@@ -16,7 +17,8 @@ data class ToDo(
     var day : String = "1",
     var remindBefore : RemindBefroeTime = RemindBefroeTime.DO_NOT,
     var priority: Priority = Priority.NONE
-)
+): Serializable
+
 
 enum class RemindBefroeTime{
     ONE_DAY , ONE_HOUR , FIFTEEN_MINUTE , DO_NOT
