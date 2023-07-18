@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import com.motodo.todo.domain.models.RemindBefroeTime
 import com.motodo.todo.domain.models.ToDo
 import java.io.File
 import java.util.Calendar
@@ -77,3 +78,12 @@ fun getUriOfCachedAudio(context: Context): Uri? {
     }
 }
 
+fun setReminderCalendar(remindBefore: RemindBefroeTime, calendar: Calendar): Calendar? {
+    when (remindBefore) {
+        RemindBefroeTime.ONE_DAY -> calendar.add(Calendar.DAY_OF_YEAR, -1)
+        RemindBefroeTime.ONE_HOUR -> calendar.add(Calendar.HOUR_OF_DAY, -1)
+        RemindBefroeTime.FIFTEEN_MINUTE -> calendar.add(Calendar.MINUTE, -15)
+        RemindBefroeTime.DO_NOT -> null
+    }
+    return calendar
+}

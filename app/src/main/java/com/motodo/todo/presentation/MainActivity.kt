@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
         WindowInsetsControllerCompat(window, window.decorView).let { controller ->
            controller.show(WindowInsetsCompat.Type.systemBars())
         }
-
     }
 
     fun handleFullScreen() {

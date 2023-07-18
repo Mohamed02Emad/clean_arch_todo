@@ -12,22 +12,25 @@ import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.utils.createExactAlarm
 import com.motodo.todo.utils.getCalendarForTodoAlarm
 import com.motodo.todo.utils.getUriOfCachedAudio
+import com.motodo.todo.utils.setReminderCalendar
 import com.motodo.todo.utils.showNotification
 
 class TodosAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-        val todo: ToDo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent?.getSerializableExtra("todo", ToDo::class.java) as ToDo
+        val todo: ToDo? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent?.getSerializableExtra("todo", ToDo::class.java)
         } else {
-            intent?.getSerializableExtra("todo") as ToDo
+            intent?.getSerializableExtra("todo") as ToDo?
         }
-        try {
-            if (todo.hasAlarm) {
+        val useAlarm = intent?.getBooleanExtra("use_alarm", true)
+
+        todo?.let {
+            val isPlayAlarm = todo.hasAlarm && useAlarm != false
+            if (isPlayAlarm) {
                 setMediaPlayers(context!!)
             }
-            showNotification(context!!, todo.title, todo.id , todo.hasAlarm)
-        } catch (_: Exception) {
+            showNotification(context!!, todo.title, todo.id, isPlayAlarm)
         }
     }
 
@@ -72,7 +75,19 @@ class TodosAlarmReceiver : BroadcastReceiver() {
 
             val calendar = getCalendarForTodoAlarm(todo)
             createExactAlarm(calendar, alarmManager, pendingIntent)
+
+            val reminderCalendar = setReminderCalendar(todo.remindBefore, calendar)
+
+            reminderCalendar?.let { reminderCalendar ->
+                intent.putExtra("use_alarm", false)
+                val reminderPendingIntent = PendingIntent.getBroadcast(
+                    context, -todo.id, intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+                createExactAlarm(reminderCalendar, alarmManager, reminderPendingIntent)
+            }
         }
+
     }
 
 }
