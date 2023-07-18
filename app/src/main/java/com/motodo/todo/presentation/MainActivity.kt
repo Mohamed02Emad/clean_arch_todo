@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
 import com.motodo.todo.R
-import com.motodo.todo.data.receivers.alarmReceiver.DailyCheckReceiver
+import com.motodo.todo.data.receivers.dailyCheck.DailyCheckReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,15 +21,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var dataStore: DataStoreImpl
-    private val REQUEST_CODE_SCHEDULE_EXACT_ALARM = 1
 
     private val pushPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted ) {
-        }
-    }
-    private val pushPermissionLauncherAlarm = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted ->
         if (granted ) {

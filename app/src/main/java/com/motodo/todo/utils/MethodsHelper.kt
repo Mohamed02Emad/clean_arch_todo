@@ -8,6 +8,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.motodo.todo.R
+import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.presentation.MainActivity
 import java.util.Calendar
 
