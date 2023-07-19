@@ -14,6 +14,8 @@ import com.motodo.todo.domain.models.RemindBefroeTime
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.utils.DateHelper
+import com.motodo.todo.utils.getHour
+import com.motodo.todo.utils.getMinute
 import com.motodo.todo.utils.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -160,7 +162,7 @@ class HomeFragmentViewModel @Inject constructor(
             priority = priority.value!!
         )
         saveTodoToDatabase(todo)
-        if (isToday(day.toInt(), month.toInt(), year.toInt())) {
+        if (isToday(day.toInt(), month.toInt(), year.toInt() , getHour(todo), getMinute(todo)) && todo.hasAlarm) {
             setAlarmForTodo(todo)
         }
         return true
