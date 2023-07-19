@@ -4,6 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="semi_white">#BFEEEEF4</color>
     <color name="color_background">#EEEEF4</color>
+    <color name="color_splash">#D4F6FF</color>
     <color name="color_ripple">#8B8B98</color>
 
     <color name="primary_blue">#8280FF</color>

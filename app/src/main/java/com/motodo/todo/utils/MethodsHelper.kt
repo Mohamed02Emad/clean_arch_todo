@@ -80,7 +80,7 @@ fun showNotification(
     val notificationBuilder: NotificationCompat.Builder =
         NotificationCompat.Builder(context, CHANNEL_ID)
     notificationBuilder.apply {
-        setSmallIcon(R.drawable.icon)
+        setSmallIcon(R.drawable.app_icon)
         setContentTitle(title)
         setContentText(body)
         setAutoCancel(true)
