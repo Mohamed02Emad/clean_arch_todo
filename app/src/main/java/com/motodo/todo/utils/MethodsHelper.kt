@@ -19,13 +19,21 @@ fun isOldDate(day: Int, month: Int, year: Int): Boolean {
     val todayDate = Calendar.getInstance()
     todayDate.apply {
         timeInMillis = System.currentTimeMillis()
-        set(Calendar.HOUR_OF_DAY , 0)
-        set(Calendar.MINUTE , 0)
-        set(Calendar.SECOND , 0)
+        set(Calendar.HOUR_OF_DAY, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
     }
 
     return inputDate.before(todayDate)
 }
+
+fun isToday(day: Int, month: Int, year: Int): Boolean {
+    val todayDate = Calendar.getInstance()
+    return year == todayDate.get(Calendar.YEAR) &&
+            month == todayDate.get(Calendar.MONTH) &&
+            day == todayDate.get(Calendar.DAY_OF_MONTH)
+}
+
 
 fun showNotification(
     context: Context,
@@ -63,12 +71,18 @@ fun showNotification(
 
     val CHANNEL_ID = "main_chanel"
 
+    val body = if(hasAlarm){
+        "your alarm is here"
+    }else{
+        "we remind you of your task"
+    }
+
     val notificationBuilder: NotificationCompat.Builder =
         NotificationCompat.Builder(context, CHANNEL_ID)
     notificationBuilder.apply {
         setSmallIcon(R.drawable.icon)
         setContentTitle(title)
-        setContentText("Your alarm is here")
+        setContentText(body)
         setAutoCancel(true)
         setContentIntent(pendingIntent)
         setSound(null)

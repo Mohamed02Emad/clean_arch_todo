@@ -1,5 +1,6 @@
 package com.motodo.todo.di
 
+import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.mo_chatting.chatapp.data.dataStore.DataStoreImpl
@@ -9,6 +10,7 @@ import com.motodo.todo.domain.useCases.DeleteTodoUseCase
 import com.motodo.todo.domain.useCases.GetDateToDosUseCase
 import com.motodo.todo.domain.useCases.GetPreviousTodosUseCase
 import com.motodo.todo.domain.useCases.InsertTodoUseCase
+import com.motodo.todo.domain.useCases.SetAlarmForTodoUseCase
 import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.domain.useCases.UpdateTodoUseCase
 import dagger.Module
@@ -35,8 +37,8 @@ object Module {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(db: TodoDataBase): BaseRepositoryImpl {
-        return BaseRepositoryImpl(db.myDao)
+    fun provideNoteRepository(db: TodoDataBase, @ApplicationContext context: Context): BaseRepositoryImpl {
+        return BaseRepositoryImpl(db.myDao , context)
     }
 
     @Provides
@@ -47,7 +49,8 @@ object Module {
             GetDateToDosUseCase(repository),
             InsertTodoUseCase(repository),
             GetPreviousTodosUseCase(repository),
-            UpdateTodoUseCase(repository)
+            UpdateTodoUseCase(repository),
+            SetAlarmForTodoUseCase(repository)
         )
     }
 
@@ -57,6 +60,14 @@ object Module {
         @ApplicationContext appContext: Context
     ): DataStoreImpl {
         return DataStoreImpl(appContext)
+    }
+
+    @Provides
+    @Singleton
+    fun provideContext(
+        @ApplicationContext appContext: Context
+    ): Context {
+        return appContext
     }
 
 }
