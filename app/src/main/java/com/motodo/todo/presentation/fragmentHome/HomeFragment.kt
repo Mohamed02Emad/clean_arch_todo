@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.michalsvec.singlerowcalendar.calendar.CalendarChangesObserver
 import com.motodo.todo.R
+import com.motodo.todo.data.receivers.todosAlarm.TodosAlarmReceiver
 import com.motodo.todo.databinding.FragmentHomeBinding
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.presentation.recyclerViews.TodosAdapter
@@ -291,6 +292,7 @@ class HomeFragment : Fragment() {
         CoroutineScope(Dispatchers.Main).launch {
             val index = myAdapter.list.indexOf(item)
             viewModel.deleteTodos(item)
+            TodosAlarmReceiver.cancelTodoAlarms(requireContext(),item)
             myAdapter.notifyItemRemoved(index)
             showUndoSnackbar()
         }

@@ -164,7 +164,7 @@ class HomeFragmentViewModel @Inject constructor(
             priority = priority.value!!
         )
         saveTodoToDatabase(todo)
-        if (isToday(day.toInt(), month.toInt(), year.toInt() , getHour(todo), getMinute(todo)) && todo.hasAlarm) {
+        if (todo.hasAlarm && isToday(day.toInt(), month.toInt(), year.toInt() , getHour(todo), getMinute(todo)) ) {
             setAlarmForTodo(todo)
         }
         return todo
@@ -188,8 +188,11 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     fun undoDeletion() = viewModelScope.launch {
-        removedTodo.value?.let {
-            saveTodoToDatabase(removedTodo.value!!)
+        removedTodo.value?.let {todo ->
+            saveTodoToDatabase(todo)
+            if (todo.hasAlarm && isToday(todo.day.toInt(),todo.month.toInt(),todo.year.toInt() , getHour(todo), getMinute(todo)) ) {
+                setAlarmForTodo(todo)
+            }
             _removedTodo.value = null
         }
     }

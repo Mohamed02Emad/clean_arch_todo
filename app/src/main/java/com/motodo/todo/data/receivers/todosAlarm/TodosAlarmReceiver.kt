@@ -89,6 +89,29 @@ class TodosAlarmReceiver : BroadcastReceiver() {
             }
         }
 
+        fun cancelTodoAlarms(context: Context, todo: ToDo) {
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            // Cancel the main alarm
+            val mainIntent = Intent(context, TodosAlarmReceiver::class.java)
+            mainIntent.putExtra("todo", todo)
+            val mainPendingIntent = PendingIntent.getBroadcast(
+                context, todo.id + 1, mainIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            alarmManager.cancel(mainPendingIntent)
+
+            // Cancel the reminder alarm if it exists
+            val reminderIntent = Intent(context, TodosAlarmReceiver::class.java)
+            reminderIntent.putExtra("todo", todo)
+            reminderIntent.putExtra("use_alarm", false)
+            val reminderPendingIntent = PendingIntent.getBroadcast(
+                context, -(todo.id + 1), reminderIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            alarmManager.cancel(reminderPendingIntent)
+        }
+
     }
 
 }
