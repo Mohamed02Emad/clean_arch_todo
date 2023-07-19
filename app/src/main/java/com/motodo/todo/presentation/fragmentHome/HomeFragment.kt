@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isGone
@@ -61,8 +62,10 @@ class HomeFragment : Fragment() {
     }
     private fun setOnClickListeners() {
         binding.btnAddNewTodo.setOnClickListener {
-            askForAlarmPermission()
-            openBottomSheet()
+            val hasAlarm = askForAlarmPermission()
+            if (hasAlarm) {
+                openBottomSheet()
+            }
         }
         binding.btnSettings.setOnClickListener {
             goToSettingsFragment()
@@ -72,16 +75,32 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun askForAlarmPermission() {
+
+    private fun askForAlarmPermission() :Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager =
                 ContextCompat.getSystemService(requireContext(), AlarmManager::class.java)
             if (alarmManager?.canScheduleExactAlarms() == false) {
-                Intent().also { intent ->
-                    intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-                    requireContext().startActivity(intent)
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setTitle("Need permission to schedule alarms")
+                builder.setMessage("This app needs permission to schedule alarms in order to work properly. Would you like to grant this permission?")
+                builder.setPositiveButton("Yes") { dialog, _ ->
+                    dialog.dismiss()
+                    Intent().also { intent ->
+                        intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                        requireContext().startActivity(intent)
+                    }
                 }
+                builder.setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                builder.show()
+                return false
+            }else{
+                return true
             }
+        }else{
+            return true
         }
     }
 
