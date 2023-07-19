@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             controller.hide(WindowInsetsCompat.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
-        window.statusBarColor = ContextCompat.getColor(this, R.color.primary_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.color_splash)
     }
 
      suspend fun isOnBoardingFinished(): Boolean {

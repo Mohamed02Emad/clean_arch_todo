@@ -14,6 +14,7 @@ import com.motodo.todo.domain.models.RemindBefroeTime
 import com.motodo.todo.domain.models.ToDo
 import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.utils.DateHelper
+import com.motodo.todo.utils.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,8 +24,11 @@ import java.util.Date
 import javax.inject.Inject
 
 const val TAG = "mohamed"
+
 @HiltViewModel
-class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : ViewModel() {
+class HomeFragmentViewModel @Inject constructor(
+    val useCases: TodoUseCases
+) : ViewModel() {
 
 
     private val _todos = MutableLiveData<ArrayList<ToDo>?>(ArrayList())
@@ -142,18 +146,30 @@ class HomeFragmentViewModel @Inject constructor(val useCases : TodoUseCases) : V
             return false
         }
         val date = currentDate.value!!
+        val day = DateHelper.getDay(date)
+        val month = DateHelper.getMonthIndex(date)
+        val year = DateHelper.getYearName(date)
         val todo = ToDo(
             title = title.value!!,
             hasAlarm = hasAlarm.value!!,
             alarmTime = if (hasAlarm.value!!) alarmTime.value!! else null,
-            year = DateHelper.getYearName(date),
-            month = DateHelper.getMonthIndex(date),
-            day = DateHelper.getDay(date),
+            year = year,
+            month = month,
+            day = day,
             remindBefore = if (hasNotifyEnabled.value!!) notifyBefore.value!! else RemindBefroeTime.DO_NOT,
             priority = priority.value!!
         )
         saveTodoToDatabase(todo)
+        if (isToday(day.toInt(), month.toInt(), year.toInt())) {
+            setAlarmForTodo(todo)
+        }
         return true
+    }
+
+    private fun setAlarmForTodo(todo: ToDo) {
+        viewModelScope.launch {
+            useCases.setAlarmForTodoUseCase(todo)
+        }
     }
 
     private fun saveTodoToDatabase(todo: ToDo) {

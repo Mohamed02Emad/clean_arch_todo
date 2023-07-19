@@ -1,10 +1,12 @@
 package com.motodo.todo.domain.models
 
+import androidx.annotation.Keep
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.io.Serializable
 import java.util.Date
 
+@Keep
 @Entity
 data class ToDo(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,

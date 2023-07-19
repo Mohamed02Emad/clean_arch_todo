@@ -5,5 +5,6 @@ data class TodoUseCases (
     val getTodosUseCase: GetDateToDosUseCase,
     val insertTodoUseCase: InsertTodoUseCase,
     val getPreviousTodosUseCase: GetPreviousTodosUseCase,
-    val updateTodoUseCase: UpdateTodoUseCase
+    val updateTodoUseCase: UpdateTodoUseCase,
+    val setAlarmForTodoUseCase: SetAlarmForTodoUseCase
 )
