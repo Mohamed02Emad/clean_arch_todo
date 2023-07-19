@@ -42,6 +42,7 @@ import java.util.Date
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
+    private var snackbar: Snackbar? = null
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeFragmentViewModel by viewModels()
     private lateinit var myAdapter : TodosAdapter
@@ -74,7 +75,6 @@ class HomeFragment : Fragment() {
             goToPreviousFragment()
         }
     }
-
 
     private fun askForAlarmPermission() :Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -146,6 +146,85 @@ class HomeFragment : Fragment() {
             }
         }
     }
+    private fun setAlarmTimeText(hourOfDay: Int, minute: Int) {
+        var string = ""
+        if (hourOfDay > 12) string += "${hourOfDay - 12}:"
+        else string += "${hourOfDay}:"
+        string += "${minute} "
+        if (hourOfDay > 12) string += "PM"
+        else string += "AM"
+        viewModel.setAlarmTime(string)
+    }
+    private fun unCheckAllChips(listOfChips: List<Button>) {
+        for (chip in listOfChips) {
+            chip.background =
+                ContextCompat.getDrawable(requireContext(), R.drawable.chip_unselected)
+            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+    }
+    private fun selectChip(chip: Button) {
+        chip.background = ContextCompat.getDrawable(requireContext(), R.drawable.chip_selected)
+        chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_blue))
+    }
+    private fun setupRecyclerView() {
+        myAdapter = TodosAdapter(viewModel.todos.value!!) { todo, position ->
+            triggerTodoChecked(todo, position)
+            myAdapter.notifyItemChanged(position)
+        }
+        binding.rvTodos.adapter = myAdapter
+        setupSwipeToDelete()
+    }
+    private fun setObservers() {
+        viewModel.apply {
+            todos.observe(viewLifecycleOwner) { newList ->
+                newList?.let {
+                    myAdapter.list = newList
+                    myAdapter.notifyDataSetChanged()
+                }
+            }
+            isBottomSheetOpened.observe(viewLifecycleOwner) { state ->
+                binding.semiBlackWall.isGone = !state
+            }
+        }
+    }
+    private val myCalendarChangesObserver = object : CalendarChangesObserver {
+        override fun whenSelectionChanged(isSelected: Boolean, position: Int, date: Date) {
+            super.whenSelectionChanged(isSelected, position, date)
+            if (viewModel.isNewDate(date)) {
+                viewModel.dayChanged(date)
+            }
+        }
+    }
+    private fun setupRowCalendar() {
+        binding.mainSingleRowCalendar.apply {
+            calendarViewManager = viewModel.myCalendarViewManager
+            calendarChangesObserver = myCalendarChangesObserver
+            calendarSelectionManager = viewModel.mySelectionManager
+            futureDaysCount = 30
+            includeCurrentDate = true
+            init()
+            select(0)
+        }
+    }
+
+    private fun setupSwipeToDelete() {
+        val swipeToDeleteCallback: SwipeToDeleteCallback =
+            object : SwipeToDeleteCallback(requireContext()) {
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
+                    removeAfterSwiped(viewHolder)
+                }
+            }
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(binding.rvTodos)
+    }
+
+    private fun triggerTodoChecked(todo: ToDo, position: Int) {
+        todo.isChecked = !todo.isChecked
+        lifecycleScope.launch {
+            viewModel.updateTodo(todo, position)
+        }
+    }
+
     private fun setBottomSheetOnClicks(dialog: BottomSheetDialog) {
         val listOfReminderChips = listOf<Button>(
             dialog.findViewById(R.id.chip_one_day)!!,
@@ -193,111 +272,49 @@ class HomeFragment : Fragment() {
                 setAlarmTimeText(hourOfDay, minute)
             }
             findViewById<Button>(R.id.btn_save)?.setOnClickListener {
-               val isSaved  = viewModel.saveTodo()
-                if (isSaved) {
-                    dialog.dismiss()
-                }else{
-                    Toast.makeText(requireContext(),"Complete all Fields",Toast.LENGTH_SHORT).show()
+                CoroutineScope(Dispatchers.Main).launch {
+                    val todo = viewModel.saveTodo()
+                    if (todo != null) {
+                        //myAdapter.notifyItemInserted(myAdapter.list.indexOf(todo))
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(requireContext(), "Complete all Fields", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             }
         }
     }
-    private fun setAlarmTimeText(hourOfDay: Int, minute: Int) {
-        var string = ""
-        if (hourOfDay > 12) string += "${hourOfDay - 12}:"
-        else string += "${hourOfDay}:"
-        string += "${minute} "
-        if (hourOfDay > 12) string += "PM"
-        else string += "AM"
-        viewModel.setAlarmTime(string)
-    }
-    private fun unCheckAllChips(listOfChips: List<Button>) {
-        for (chip in listOfChips) {
-            chip.background =
-                ContextCompat.getDrawable(requireContext(), R.drawable.chip_unselected)
-            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-        }
-    }
-    private fun selectChip(chip: Button) {
-        chip.background = ContextCompat.getDrawable(requireContext(), R.drawable.chip_selected)
-        chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_blue))
-    }
-    private fun setupRecyclerView() {
-        myAdapter = TodosAdapter { todo , position ->
-            triggerTodoChecked(todo , position)
-            myAdapter.notifyItemChanged(position)
-        }
-        myAdapter.differ.submitList(viewModel.todos.value)
-        binding.rvTodos.adapter = myAdapter
-        setupSwipeToDelete()
-    }
-    private fun setObservers() {
-        viewModel.apply {
-            todos.observe(viewLifecycleOwner) { newList ->
-                myAdapter.differ.submitList(newList)
-            }
-            isBottomSheetOpened.observe(viewLifecycleOwner) { state ->
-                binding.semiBlackWall.isGone = !state
-            }
-        }
-    }
-    private val myCalendarChangesObserver = object : CalendarChangesObserver {
-        override fun whenSelectionChanged(isSelected: Boolean, position: Int, date: Date) {
-            super.whenSelectionChanged(isSelected, position, date)
-            if (viewModel.isNewDate(date)) {
-                viewModel.dayChanged(date)
-            }
-        }
-    }
-    private fun setupRowCalendar() {
-        binding.mainSingleRowCalendar.apply {
-            calendarViewManager = viewModel.myCalendarViewManager
-            calendarChangesObserver = myCalendarChangesObserver
-            calendarSelectionManager = viewModel.mySelectionManager
-            futureDaysCount = 30
-            includeCurrentDate = true
-            init()
-            select(0)
-        }
-    }
-    private fun setupSwipeToDelete() {
-        val swipeToDeleteCallback: SwipeToDeleteCallback =
-            object : SwipeToDeleteCallback(requireContext()) {
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
-                    removeAfterSwiped(viewHolder)
-                }
-            }
-        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
-        itemTouchHelper.attachToRecyclerView(binding.rvTodos)
-    }
+
     private fun removeAfterSwiped(viewHolder: RecyclerView.ViewHolder) {
-        val item = myAdapter.differ.currentList[viewHolder.adapterPosition]
-        CoroutineScope(Dispatchers.IO).launch {
+        val item = myAdapter.list[viewHolder.adapterPosition]
+        CoroutineScope(Dispatchers.Main).launch {
+            val index = myAdapter.list.indexOf(item)
             viewModel.deleteTodos(item)
+            myAdapter.notifyItemRemoved(index)
             showUndoSnackbar()
         }
     }
+
     private fun showUndoSnackbar() {
-        val snackbar = Snackbar.make(
+        if (snackbar != null) {
+            snackbar?.dismiss()
+            snackbar = null
+        }
+        snackbar = Snackbar.make(
             binding.rvTodos,
             "Todo deleted",
             Snackbar.LENGTH_LONG
         )
-        snackbar.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.primary_red))
-        snackbar.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_blue))
-        snackbar.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.color_dialog))
-        snackbar.setAction("Undo") {
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.undoDeletion()
-            }
-            snackbar.dismiss()
+        snackbar?.setActionTextColor(ContextCompat.getColor(requireContext(), R.color.primary_red))
+        snackbar?.setTextColor(ContextCompat.getColor(requireContext(), R.color.secondary_blue))
+        snackbar?.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.color_dialog))
+        snackbar?.setAction("Undo") {
+            viewModel.undoDeletion()
+            snackbar?.dismiss()
         }
-        snackbar.show()
+        snackbar?.show()
     }
-    private fun triggerTodoChecked(todo: ToDo , position: Int) {
-        todo.isChecked = !todo.isChecked
-        lifecycleScope.launch {
-            viewModel.updateTodo(todo , position)
-        }
-    }
+
+
 }

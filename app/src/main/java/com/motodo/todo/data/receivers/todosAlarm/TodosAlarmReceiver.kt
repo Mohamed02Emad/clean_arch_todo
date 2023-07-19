@@ -24,8 +24,9 @@ class TodosAlarmReceiver : BroadcastReceiver() {
             intent?.getSerializableExtra("todo") as ToDo?
         }
         val useAlarm = intent?.getBooleanExtra("use_alarm", true)
-
         todo?.let {
+            if (todo.isChecked) return
+
             val isPlayAlarm = todo.hasAlarm && useAlarm != false
             if (isPlayAlarm) {
                 setMediaPlayers(context!!)

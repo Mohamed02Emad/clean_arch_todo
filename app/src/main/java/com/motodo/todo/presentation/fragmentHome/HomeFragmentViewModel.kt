@@ -18,7 +18,6 @@ import com.motodo.todo.utils.getHour
 import com.motodo.todo.utils.getMinute
 import com.motodo.todo.utils.isToday
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -39,6 +38,11 @@ class HomeFragmentViewModel @Inject constructor(
     private val _isBottomSheetOpened = MutableLiveData<Boolean>(false)
     val isBottomSheetOpened: LiveData<Boolean> = _isBottomSheetOpened
 
+    private val _currentDate = MutableLiveData<Date?>(null)
+    val currentDate: LiveData<Date?> = _currentDate
+
+    private val _dateChanged = MutableLiveData<Boolean>(true)
+    val dateChanged: LiveData<Boolean> = _dateChanged
 
     private val _hasAlarm = MutableLiveData<Boolean>(true)
     val hasAlarm: LiveData<Boolean> = _hasAlarm
@@ -120,11 +124,10 @@ class HomeFragmentViewModel @Inject constructor(
             }
     }
 
-
-    private val _currentDate = MutableLiveData<Date?>(null)
-    val currentDate: LiveData<Date?> = _currentDate
     fun dayChanged(date: Date) {
-        setCurrentDate(date)
+        viewModelScope.launch(Dispatchers.Main) {
+            setCurrentDate(date)
+        }
     }
 
     fun triggerBottomSheetState() {
@@ -132,20 +135,19 @@ class HomeFragmentViewModel @Inject constructor(
     }
 
     fun isNewDate(date: Date): Boolean = currentDate.value == null || date != currentDate.value
-    private fun setCurrentDate(date: Date) {
+    private suspend fun setCurrentDate(date: Date) {
+        setDateChanged(true)
         _currentDate.value = date
         updateTodosList(date)
     }
 
-    private fun updateTodosList(date: Date) {
-        CoroutineScope(Dispatchers.Main).launch{
-            _todos.value = useCases.getTodosUseCase(date)
-        }
+    private suspend fun updateTodosList(date: Date) {
+        _todos.value = useCases.getTodosUseCase(date)
     }
 
-    fun saveTodo(): Boolean {
+    suspend fun saveTodo(): ToDo? {
         if (title.value.isNullOrBlank()) {
-            return false
+            return null
         }
         val date = currentDate.value!!
         val day = DateHelper.getDay(date)
@@ -165,7 +167,7 @@ class HomeFragmentViewModel @Inject constructor(
         if (isToday(day.toInt(), month.toInt(), year.toInt() , getHour(todo), getMinute(todo)) && todo.hasAlarm) {
             setAlarmForTodo(todo)
         }
-        return true
+        return todo
     }
 
     private fun setAlarmForTodo(todo: ToDo) {
@@ -174,36 +176,32 @@ class HomeFragmentViewModel @Inject constructor(
         }
     }
 
-    private fun saveTodoToDatabase(todo: ToDo) {
-        viewModelScope.launch(Dispatchers.IO) {
-            useCases.insertTodoUseCase(todo)
-            updateTodosList(currentDate.value!!)
-        }
+    private suspend fun saveTodoToDatabase(todo: ToDo) = withContext(Dispatchers.Main) {
+        useCases.insertTodoUseCase(todo)
+        _todos.value = useCases.sortTodosUseCase(_todos.value!!, todo)
     }
 
     suspend fun deleteTodos(item: ToDo) {
+        _removedTodo.value = item
+        _todos.value!!.remove(item)
         useCases.deleteTodoUseCase(item)
-        updateTodosList(currentDate.value!!)
-        withContext(Dispatchers.Main){
-            _removedTodo.value = item
+    }
+
+    fun undoDeletion() = viewModelScope.launch {
+        removedTodo.value?.let {
+            saveTodoToDatabase(removedTodo.value!!)
+            _removedTodo.value = null
         }
     }
 
-    suspend fun undoDeletion() {
-        if (removedTodo.value != null) {
-            useCases.insertTodoUseCase(removedTodo.value!!)
-            updateTodosList(currentDate.value!!)
-            withContext(Dispatchers.Main) {
-                _removedTodo.value = null
-            }
-        }
-    }
-
-    suspend fun updateTodo(todo: ToDo , index: Int) {
+    suspend fun updateTodo(todo: ToDo, index: Int) {
         useCases.updateTodoUseCase(todo)
         _todos.value?.set(index, todo)
     }
 
+    fun setDateChanged(b: Boolean) {
+        _dateChanged.value = b
+    }
 
     val myCalendarViewManager = object : CalendarViewManager {
         override fun setCalendarViewResourceId(

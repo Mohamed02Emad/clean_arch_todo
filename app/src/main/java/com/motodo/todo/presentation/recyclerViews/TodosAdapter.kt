@@ -13,19 +13,9 @@ import com.motodo.todo.databinding.CardTodoBinding
 import com.motodo.todo.domain.models.Priority
 import com.motodo.todo.domain.models.ToDo
 
-class TodosAdapter(val onCheckClicked: (ToDo , Int ) -> Unit) : RecyclerView.Adapter<TodosAdapter.TodosViewHolder>() {
+class TodosAdapter(var list : ArrayList<ToDo>,val onCheckClicked: (ToDo , Int ) -> Unit) : RecyclerView.Adapter<TodosAdapter.TodosViewHolder>() {
 
-    private val differCallBack = object : DiffUtil.ItemCallback<ToDo>() {
-        override fun areItemsTheSame(oldItem: ToDo, newItem: ToDo): Boolean {
-            return oldItem.id == newItem.id
-        }
 
-        override fun areContentsTheSame(oldItem: ToDo, newItem: ToDo): Boolean {
-            return oldItem == newItem
-        }
-    }
-
-    val differ = AsyncListDiffer(this, differCallBack)
 
     inner class TodosViewHolder(val binding: CardTodoBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -42,7 +32,7 @@ class TodosAdapter(val onCheckClicked: (ToDo , Int ) -> Unit) : RecyclerView.Ada
 
 
     override fun onBindViewHolder(holder: TodosViewHolder, position: Int) {
-       val todo = differ.currentList[position]
+       val todo = list[position]
         holder.binding.tvTitle.text = todo.title
         holder.binding.tvTime.text = todo.alarmTime ?: ""
 
@@ -93,7 +83,7 @@ class TodosAdapter(val onCheckClicked: (ToDo , Int ) -> Unit) : RecyclerView.Ada
 
     }
 
-    override fun getItemCount(): Int = differ.currentList.size
+    override fun getItemCount(): Int = list.size
 
 }
 
