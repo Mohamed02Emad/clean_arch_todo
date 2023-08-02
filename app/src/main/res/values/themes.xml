@@ -18,11 +18,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
-    <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/black</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="timePickerColors">
+        <item name="android:textColorPrimary">@color/black</item> <!-- color for digits -->
+        <item name="android:textColor">@color/black</item> <!-- color for colon -->
+        <item name="android:colorControlNormal">@color/primary_grey</item> <!-- color for (horizontal) delimeters -->
     </style>
 
 </resources>

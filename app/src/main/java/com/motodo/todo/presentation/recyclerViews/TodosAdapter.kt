@@ -39,7 +39,7 @@ class TodosAdapter(var list : ArrayList<ToDo>,val onCheckClicked: (ToDo , Int ) 
         holder.binding.ivCheck.apply {
             setImageResource(
                 // wrong names that's why i used !
-                if(!todo.isChecked) R.drawable.ic_check_circle
+                if(!todo.isChecked) R.drawable.ic_not_checked_square
                 else R.drawable.ic_check
             )
         }

@@ -32,6 +32,7 @@ import com.motodo.todo.R
 import com.motodo.todo.data.receivers.todosAlarm.TodosAlarmReceiver
 import com.motodo.todo.databinding.FragmentHomeBinding
 import com.motodo.todo.domain.models.ToDo
+import com.motodo.todo.presentation.MainActivity
 import com.motodo.todo.presentation.recyclerViews.TodosAdapter
 import com.motodo.todo.utils.SwipeToDeleteCallback
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +54,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(layoutInflater)
+        (requireActivity() as MainActivity).setSupportActionBar(binding.myToolbar)
+        (requireActivity() as MainActivity).getSupportActionBar()?.setDisplayShowTitleEnabled(false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
