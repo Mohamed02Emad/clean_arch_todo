@@ -13,6 +13,7 @@ import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.presentation.fragmentHome.TAG
 import com.motodo.todo.utils.createExactAlarm
 import com.motodo.todo.utils.getCalendarForTomorrow
+import com.motodo.todo.utils.showLog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,7 @@ class DailyCheckReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         CoroutineScope(Dispatchers.IO).launch {
+          //  showLog("daily alarm received")
             val currentDate = Date()
             val todos = useCases.getTodosUseCase(currentDate)
             for (todo in todos) {
@@ -42,7 +44,6 @@ class DailyCheckReceiver : BroadcastReceiver() {
         fun setDailyCheck(context: Context) {
 
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
             val intent = Intent(context, DailyCheckReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(
                 context, 0, intent,
@@ -50,7 +51,9 @@ class DailyCheckReceiver : BroadcastReceiver() {
             )
 
             val calendar = getCalendarForTomorrow()
+            //showLog("dailyAlarm about to get Created")
             createExactAlarm(calendar, alarmManager, pendingIntent)
+           // showLog("dailyAlarmCreated")
         }
 
     }

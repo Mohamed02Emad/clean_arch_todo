@@ -170,7 +170,7 @@ class HomeFragmentViewModel @Inject constructor(
         return todo
     }
 
-    private fun setAlarmForTodo(todo: ToDo) {
+    private fun  setAlarmForTodo(todo: ToDo) {
         viewModelScope.launch {
             useCases.setAlarmForTodoUseCase(todo)
         }

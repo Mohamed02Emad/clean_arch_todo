@@ -13,11 +13,13 @@ import com.motodo.todo.utils.createExactAlarm
 import com.motodo.todo.utils.getCalendarForTodoAlarm
 import com.motodo.todo.utils.getUriOfCachedAudio
 import com.motodo.todo.utils.setReminderCalendar
+import com.motodo.todo.utils.showLog
 import com.motodo.todo.utils.showNotification
 
 class TodosAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
+      //  showLog("todoo alarm received ")
         val todo: ToDo? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent?.getSerializableExtra("todo", ToDo::class.java)
         } else {
@@ -77,6 +79,7 @@ class TodosAlarmReceiver : BroadcastReceiver() {
             val calendar = getCalendarForTodoAlarm(todo)
             createExactAlarm(calendar, alarmManager, pendingIntent)
 
+           // showLog("Set daily reminder at ${todo.alarmTime} for ${todo.title}")
             val reminderCalendar = setReminderCalendar(todo.remindBefore, calendar)
 
             reminderCalendar?.let { reminderCalendar ->
@@ -85,6 +88,7 @@ class TodosAlarmReceiver : BroadcastReceiver() {
                     context, -(todo.id + 1), intent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
+            //    showLog("Set daily for ${todo.title}")
                 createExactAlarm(reminderCalendar, alarmManager, reminderPendingIntent)
             }
         }
