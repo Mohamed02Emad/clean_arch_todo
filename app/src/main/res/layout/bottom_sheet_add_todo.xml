@@ -54,6 +54,7 @@
         android:id="@+id/timePicker"
         android:layout_width="wrap_content"
         android:layout_height="160dp"
+        android:theme="@style/timePickerColors"
         android:timePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -86,7 +87,7 @@
         app:layout_constraintBottom_toBottomOf="@id/iv_notification"
         app:layout_constraintStart_toEndOf="@id/iv_notification"
         app:layout_constraintTop_toTopOf="@id/iv_notification"
-        android:text="Remind me Before" />
+        android:text="Set reminder " />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/sw_remind_me"
@@ -109,6 +110,7 @@
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:layout_weight="1" />
 
         <androidx.appcompat.widget.AppCompatButton
@@ -116,6 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="24dp"
             android:text="1 day"
+            android:visibility="gone"
             android:paddingHorizontal="6dp"
             android:textAllCaps="false"
             android:background="@drawable/chip_selected"

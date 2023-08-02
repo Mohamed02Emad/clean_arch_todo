@@ -15,42 +15,16 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(val dataStoreImpl: DataStoreImpl): ViewModel() {
 
-    private val _currentPage: MutableLiveData<OnBoarding> = MutableLiveData()
-    val currentPage: LiveData<OnBoarding> = _currentPage
-    private val onBoardings : ArrayList<OnBoarding> = ArrayList()
+    internal val onBoardings : ArrayList<OnBoarding> = ArrayList()
 
     init {
-        onBoardings.add(OnBoarding(R.drawable.ic_human_one, "Create Tasks" , "what do you need to do",0))
-        onBoardings.add(OnBoarding(R.drawable.ic_human_two, "Pin the task" , "save the task to next day",1))
-        onBoardings.add(OnBoarding(R.drawable.ic_human_three, "Mark completed tasks" , "we know, you like it",2))
-        _currentPage.value= onBoardings[0]
+        onBoardings.add(OnBoarding(R.drawable.ic_human_one, "Create a todo" , "and save it ",0))
+        onBoardings.add(OnBoarding(R.drawable.ic_human_two, "Set Time for todo alarm" , "and you will get notified ",1))
+        onBoardings.add(OnBoarding(R.drawable.ic_human_three, "Set Reminder " , "and we will remind you before the alarm",2))
     }
 
     suspend fun setIsOnBoardingFinished(isOnBoardingFinished: Boolean) = withContext(Dispatchers.IO){
         dataStoreImpl.setIsOnBoardingFinished(isOnBoardingFinished)
     }
-    fun isFirstPage(currentPage: Int): Boolean = currentPage == 0
-    fun isLastPage(currentPage: Int): Boolean = currentPage == 2
 
-    fun getPreviousPage(): OnBoarding? {
-        val currentPage = _currentPage.value!!.pageNumber
-        return if (isFirstPage(currentPage)) {
-            null
-        } else {
-            onBoardings[currentPage-1]
-        }
-    }
-
-    fun getNextPage(): OnBoarding? {
-        val currentPage = _currentPage.value!!.pageNumber
-        return if (isLastPage(currentPage)) {
-            null
-        } else {
-            onBoardings[currentPage+1]
-        }
-    }
-
-    fun setCurrentPage(currentPage: OnBoarding){
-        _currentPage.value = currentPage
-    }
 }

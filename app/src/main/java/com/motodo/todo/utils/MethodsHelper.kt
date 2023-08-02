@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.motodo.todo.R
 import com.motodo.todo.data.receivers.muteAlarmReceiver.MuteAlarmReceiver
@@ -27,11 +28,18 @@ fun isOldDate(day: Int, month: Int, year: Int): Boolean {
     return inputDate.before(todayDate)
 }
 
-fun isToday(day: Int, month: Int, year: Int): Boolean {
+fun isToday(day: Int, month: Int, year: Int, hour: Int, minute: Int): Boolean {
     val todayDate = Calendar.getInstance()
-    return year == todayDate.get(Calendar.YEAR) &&
-            month == todayDate.get(Calendar.MONTH) &&
-            day == todayDate.get(Calendar.DAY_OF_MONTH)
+    val todayYear = todayDate.get(Calendar.YEAR)
+    val todayMonth = todayDate.get(Calendar.MONTH)
+    val todayDay = todayDate.get(Calendar.DAY_OF_MONTH)
+    val todayHour = todayDate.get(Calendar.HOUR_OF_DAY)
+    val todayMinute = todayDate.get(Calendar.MINUTE)
+
+    return year == todayYear &&
+            month == todayMonth &&
+            day == todayDay &&
+            (hour > todayHour || (hour == todayHour && minute > todayMinute))
 }
 
 
@@ -106,5 +114,9 @@ fun showNotification(
         notificationBuilder.build()
     )
 
+}
+
+fun showLog(message : String){
+    Log.d("mohamed", message)
 }
 
