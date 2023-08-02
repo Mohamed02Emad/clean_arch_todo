@@ -120,6 +120,20 @@
         </androidx.core.widget.NestedScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_rawRes="@raw/anim_no_data"
+        app:lottie_autoPlay="false"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:lottie_loop="true"/>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/btn_add_new_todo"
         android:layout_width="55dp"

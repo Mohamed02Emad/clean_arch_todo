@@ -184,6 +184,11 @@ class HomeFragment : Fragment() {
                 newList?.let {
                     myAdapter.list = newList
                     myAdapter.notifyDataSetChanged()
+                    if (newList.isEmpty()){
+                        setNoItemsAnimationVisibility(true)
+                    }else{
+                        setNoItemsAnimationVisibility(false)
+                    }
                 }
             }
             isBottomSheetOpened.observe(viewLifecycleOwner) { state ->
@@ -191,6 +196,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     private val myCalendarChangesObserver = object : CalendarChangesObserver {
         override fun whenSelectionChanged(isSelected: Boolean, position: Int, date: Date) {
             super.whenSelectionChanged(isSelected, position, date)
@@ -280,6 +286,11 @@ class HomeFragment : Fragment() {
                     val todo = viewModel.saveTodo()
                     if (todo != null) {
                         //myAdapter.notifyItemInserted(myAdapter.list.indexOf(todo))
+                        if (myAdapter.list.isEmpty()){
+                            setNoItemsAnimationVisibility(true)
+                        }else{
+                            setNoItemsAnimationVisibility(false)
+                        }
                         dialog.dismiss()
                     } else {
                         Toast.makeText(requireContext(), "Complete all Fields", Toast.LENGTH_SHORT)
@@ -297,7 +308,16 @@ class HomeFragment : Fragment() {
             viewModel.deleteTodos(item)
             TodosAlarmReceiver.cancelTodoAlarms(requireContext(),item)
             myAdapter.notifyItemRemoved(index)
+            checkIfAdapterListIsEmpty()
             showUndoSnackbar()
+        }
+    }
+
+    private fun checkIfAdapterListIsEmpty() {
+        if (myAdapter.list.isEmpty()){
+            setNoItemsAnimationVisibility(true)
+        }else{
+            setNoItemsAnimationVisibility(false)
         }
     }
 
@@ -307,7 +327,7 @@ class HomeFragment : Fragment() {
             snackbar = null
         }
         snackbar = Snackbar.make(
-            binding.rvTodos,
+            binding.btnAddNewTodo,
             "Todo deleted",
             Snackbar.LENGTH_LONG
         )
@@ -316,9 +336,19 @@ class HomeFragment : Fragment() {
         snackbar?.setBackgroundTint(ContextCompat.getColor(requireContext(), R.color.color_dialog))
         snackbar?.setAction("Undo") {
             viewModel.undoDeletion()
+            checkIfAdapterListIsEmpty()
             snackbar?.dismiss()
         }
         snackbar?.show()
+    }
+
+    private fun setNoItemsAnimationVisibility(isVisible: Boolean) {
+         binding.lottieNoData.isGone = !isVisible
+        if (isVisible){
+            binding.lottieNoData.playAnimation()
+        }else{
+            binding.lottieNoData.pauseAnimation()
+        }
     }
 
 
