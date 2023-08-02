@@ -11,6 +11,7 @@ import com.motodo.todo.domain.useCases.GetDateToDosUseCase
 import com.motodo.todo.domain.useCases.GetPreviousTodosUseCase
 import com.motodo.todo.domain.useCases.InsertTodoUseCase
 import com.motodo.todo.domain.useCases.SetAlarmForTodoUseCase
+import com.motodo.todo.domain.useCases.SortTodosUseCase
 import com.motodo.todo.domain.useCases.TodoUseCases
 import com.motodo.todo.domain.useCases.UpdateTodoUseCase
 import dagger.Module
@@ -50,7 +51,8 @@ object Module {
             InsertTodoUseCase(repository),
             GetPreviousTodosUseCase(repository),
             UpdateTodoUseCase(repository),
-            SetAlarmForTodoUseCase(repository)
+            SetAlarmForTodoUseCase(repository),
+            SortTodosUseCase()
         )
     }
 

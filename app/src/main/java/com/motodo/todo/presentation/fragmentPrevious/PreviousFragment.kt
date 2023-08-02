@@ -45,12 +45,14 @@ class PreviousFragment : Fragment() {
 
     private fun setObservers() {
         viewModel.todos.observe(viewLifecycleOwner){todos ->
-            myAdapter.differ.submitList(todos)
+            todos?.let{
+                myAdapter.list =todos
+            }
         }
     }
 
     private fun setUpRecyclerView() {
-        myAdapter = TodosAdapter { todo , position ->
+        myAdapter = TodosAdapter(viewModel.todos.value!!) { todo , position ->
             triggerTodoChecked(todo , position)
             myAdapter.notifyItemChanged(position)
         }
@@ -83,7 +85,7 @@ class PreviousFragment : Fragment() {
     }
 
     private fun removeAfterSwiped(viewHolder: RecyclerView.ViewHolder) {
-        val item = myAdapter.differ.currentList[viewHolder.adapterPosition]
+        val item = myAdapter.list[viewHolder.adapterPosition]
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.deleteTodo(item)
             showUndoSnackbar()
