@@ -82,4 +82,7 @@ dependencies {
 
     //lottie animations
     implementation("com.airbnb.android:lottie:4.1.0")
+
+    //onBoarding dots
+    implementation("com.tbuonomo:dotsindicator:5.0")
 }
