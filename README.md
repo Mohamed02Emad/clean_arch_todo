@@ -1,3 +1,7 @@
+
+# design 
+The design from https://www.behance.net/gallery/72614427/To-Do-App-Concept served as my inspiration for this project.
+
 # First video 
 
 (splash - onBoarding - home screen - adding and removing task - sort tasks by priority 
